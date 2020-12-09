@@ -2,14 +2,15 @@ package net.md_5.bungee.packet;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import lombok.Delegate;
+import net.md_5.bungee.Util;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import lombok.Delegate;
-import net.md_5.bungee.Util;
 
 /**
  * This class represents a packet which has been given a special definition. All
@@ -76,6 +77,18 @@ public abstract class DefinedPacket implements DataOutput
             chars[i] = this.readChar();
         }
         return new String( chars );
+    }
+
+
+    public long readLong()
+    {
+        try
+        {
+            return in.readLong();
+        } catch ( IOException e )
+        {
+            throw new IllegalStateException( e );
+        }
     }
 
     public void writeArray(byte[] b)
@@ -224,14 +237,6 @@ public abstract class DefinedPacket implements DataOutput
         classes[0x02] = Packet2Handshake.class;
         classes[0x03] = Packet3Chat.class;
         classes[0x09] = Packet9Respawn.class;
-        classes[0xC9] = PacketC9PlayerListItem.class;
-        classes[0xCD] = PacketCDClientStatus.class;
-        classes[0xCE] = PacketCEScoreboardObjective.class;
-        classes[0xCF] = PacketCFScoreboardScore.class;
-        classes[0xD0] = PacketD0DisplayScoreboard.class;
-        classes[0xFA] = PacketFAPluginMessage.class;
-        classes[0xFC] = PacketFCEncryptionResponse.class;
-        classes[0xFD] = PacketFDEncryptionRequest.class;
         classes[0xFE] = PacketFEPing.class;
         classes[0xFF] = PacketFFKick.class;
     }

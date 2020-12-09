@@ -44,42 +44,6 @@ public abstract class PacketHandler
     {
     }
 
-    public void handle(PacketC9PlayerListItem playerList) throws Exception
-    {
-    }
-
-    public void handle(PacketCCSettings settings) throws Exception
-    {
-    }
-
-    public void handle(PacketCDClientStatus clientStatus) throws Exception
-    {
-    }
-
-    public void handle(PacketCEScoreboardObjective objective) throws Exception
-    {
-    }
-
-    public void handle(PacketCFScoreboardScore score) throws Exception
-    {
-    }
-
-    public void handle(PacketD0DisplayScoreboard displayScoreboard) throws Exception
-    {
-    }
-
-    public void handle(PacketFAPluginMessage pluginMessage) throws Exception
-    {
-    }
-
-    public void handle(PacketFCEncryptionResponse encryptResponse) throws Exception
-    {
-    }
-
-    public void handle(PacketFDEncryptionRequest encryptRequest) throws Exception
-    {
-    }
-
     public void handle(PacketFEPing ping) throws Exception
     {
     }

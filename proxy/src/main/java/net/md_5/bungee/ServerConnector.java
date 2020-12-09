@@ -2,28 +2,21 @@ package net.md_5.bungee;
 
 import com.google.common.base.Preconditions;
 import io.netty.channel.Channel;
-import java.util.Queue;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.config.TexturePackInfo;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
-import net.md_5.bungee.api.scoreboard.Objective;
-import net.md_5.bungee.api.scoreboard.Score;
 import net.md_5.bungee.connection.CancelSendSignal;
 import net.md_5.bungee.connection.DownstreamBridge;
 import net.md_5.bungee.netty.HandlerBoss;
 import net.md_5.bungee.packet.DefinedPacket;
 import net.md_5.bungee.packet.Packet1Login;
 import net.md_5.bungee.packet.Packet9Respawn;
-import net.md_5.bungee.packet.PacketCDClientStatus;
-import net.md_5.bungee.packet.PacketCEScoreboardObjective;
-import net.md_5.bungee.packet.PacketCFScoreboardScore;
-import net.md_5.bungee.packet.PacketFAPluginMessage;
-import net.md_5.bungee.packet.PacketFDEncryptionRequest;
 import net.md_5.bungee.packet.PacketFFKick;
 import net.md_5.bungee.packet.PacketHandler;
+
+import java.util.Queue;
 
 @RequiredArgsConstructor
 public class ServerConnector extends PacketHandler
@@ -33,12 +26,12 @@ public class ServerConnector extends PacketHandler
     private Channel ch;
     private final UserConnection user;
     private final ServerInfo target;
-    private State thisState = State.ENCRYPT_REQUEST;
+    private State thisState = State.LOGIN;
+    private final static int MAGIC_HEADER = 2;
 
     private enum State
     {
-
-        ENCRYPT_REQUEST, LOGIN, FINISHED;
+        LOGIN, FINISHED
     }
 
     @Override
@@ -46,7 +39,12 @@ public class ServerConnector extends PacketHandler
     {
         this.ch = channel;
         channel.write( user.handshake );
-        channel.write( PacketCDClientStatus.CLIENT_LOGIN );
+        // IP Forwarding
+        boolean flag = BungeeCord.getInstance().config.isIpForwarding();
+        long address = flag ? Util.serializeAddress(user.getAddress().getAddress().getHostAddress()) : 0;
+        byte header = (byte) (flag ? MAGIC_HEADER : 0);
+        // end
+        channel.write(new Packet1Login(BungeeCord.PROTOCOL_VERSION,  user.handshake.username, address, header));
     }
 
     @Override
@@ -58,68 +56,36 @@ public class ServerConnector extends PacketHandler
         ServerConnectedEvent event = new ServerConnectedEvent( user, server );
         bungee.getPluginManager().callEvent( event );
 
-        ch.write( BungeeCord.getInstance().registerChannels() );
-
         // TODO: Race conditions with many connects
         Queue<DefinedPacket> packetQueue = ( (BungeeServerInfo) target ).getPacketQueue();
         while ( !packetQueue.isEmpty() )
         {
             ch.write( packetQueue.poll() );
         }
-        if ( user.settings != null )
-        {
-            ch.write( user.settings );
-        }
-
 
         synchronized ( user.getSwitchMutex() )
         {
             if ( user.getServer() == null )
             {
                 BungeeCord.getInstance().connections.put( user.getName(), user );
-                bungee.getTabListHandler().onConnect( user );
                 // Once again, first connection
                 user.clientEntityId = login.entityId;
                 user.serverEntityId = login.entityId;
                 // Set tab list size
                 Packet1Login modLogin = new Packet1Login(
                         login.entityId,
-                        login.levelType,
-                        login.gameMode,
-                        (byte) login.dimension,
-                        login.difficulty,
-                        login.unused,
-                        (byte) user.getPendingConnection().getListener().getTabListSize() );
+                        login.username,
+                        login.seed,
+                        login.dimension
+                );
                 user.ch.write( modLogin );
-                ch.write( BungeeCord.getInstance().registerChannels() );
-
-                TexturePackInfo texture = user.getPendingConnection().getListener().getTexturePack();
-                if ( texture != null )
-                {
-                    ch.write( new PacketFAPluginMessage( "MC|TPack", ( texture.getUrl() + "\00" + texture.getSize() ).getBytes() ) );
-                }
             } else
             {
-                bungee.getTabListHandler().onServerChange( user );
-
-                if ( user.serverSentScoreboard != null )
-                {
-                    for ( Objective objective : user.serverSentScoreboard.getObjectives() )
-                    {
-                        user.ch.write( new PacketCEScoreboardObjective( objective.getName(), objective.getValue(), (byte) 1 ) );
-                    }
-                    for ( Score score : user.serverSentScoreboard.getScores() )
-                    {
-                        user.ch.write( new PacketCFScoreboardScore( score.getItemName(), (byte) 1, null, 0 ) );
-                    }
-                    user.serverSentScoreboard = null;
-                }
-
                 user.sendPacket( Packet9Respawn.DIM1_SWITCH );
                 user.sendPacket( Packet9Respawn.DIM2_SWITCH );
 
                 user.serverEntityId = login.entityId;
-                user.ch.write( new Packet9Respawn( login.dimension, login.difficulty, login.gameMode, (short) 256, login.levelType ) );
+                user.ch.write( new Packet9Respawn(login.dimension));
 
                 // Remove from old servers
                 user.getServer().setObsolete( true );
@@ -127,11 +93,11 @@ public class ServerConnector extends PacketHandler
             }
 
             // TODO: Fix this?
-            if ( !user.ch.isActive() )
+            /*if ( !user.ch.isActive() )
             {
                 server.disconnect( "Quitting" );
                 throw new IllegalStateException( "No client connected for pending server!" );
-            }
+            }*/
 
             // Add to new server
             // TODO: Move this to the connected() method of DownstreamBridge
@@ -144,13 +110,6 @@ public class ServerConnector extends PacketHandler
         thisState = State.FINISHED;
 
         throw new CancelSendSignal();
-    }
-
-    @Override
-    public void handle(PacketFDEncryptionRequest encryptRequest) throws Exception
-    {
-        Preconditions.checkState( thisState == State.ENCRYPT_REQUEST, "Not expecting ENCRYPT_REQUEST" );
-        thisState = State.LOGIN;
     }
 
     @Override

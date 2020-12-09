@@ -9,11 +9,6 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import java.net.InetSocketAddress;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Level;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,10 +19,18 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerConnectEvent;
-import net.md_5.bungee.api.scoreboard.Scoreboard;
 import net.md_5.bungee.netty.HandlerBoss;
 import net.md_5.bungee.netty.PipelineUtils;
-import net.md_5.bungee.packet.*;
+import net.md_5.bungee.packet.DefinedPacket;
+import net.md_5.bungee.packet.Packet2Handshake;
+import net.md_5.bungee.packet.Packet3Chat;
+import net.md_5.bungee.packet.Packet9Respawn;
+import net.md_5.bungee.packet.PacketFFKick;
+
+import java.net.InetSocketAddress;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.logging.Level;
 
 public final class UserConnection implements ProxiedPlayer
 {
@@ -35,8 +38,6 @@ public final class UserConnection implements ProxiedPlayer
     public final Packet2Handshake handshake;
     private final ProxyServer bungee;
     public final Channel ch;
-    final Packet1Login forgeLogin;
-    final List<PacketFAPluginMessage> loginMessages;
     @Getter
     private final PendingConnection pendingConnection;
     @Getter
@@ -59,19 +60,16 @@ public final class UserConnection implements ProxiedPlayer
     private final Collection<String> playerGroups = new THashSet<>();
     private final Collection<String> permissions = new THashSet<>();
     private final Object permMutex = new Object();
+
     @Getter
     private final Object switchMutex = new Object();
-    public PacketCCSettings settings;
-    public Scoreboard serverSentScoreboard;
 
-    public UserConnection(BungeeCord bungee, Channel channel, PendingConnection pendingConnection, Packet2Handshake handshake, Packet1Login forgeLogin, List<PacketFAPluginMessage> loginMessages)
+    public UserConnection(BungeeCord bungee, Channel channel, PendingConnection pendingConnection, Packet2Handshake handshake)
     {
         this.bungee = bungee;
         this.ch = channel;
         this.handshake = handshake;
         this.pendingConnection = pendingConnection;
-        this.forgeLogin = forgeLogin;
-        this.loginMessages = loginMessages;
         this.name = handshake.username;
         this.displayName = name;
 
@@ -105,6 +103,11 @@ public final class UserConnection implements ProxiedPlayer
         {
             connect( target, false );
         }
+    }
+
+    @Override
+    public void sendData(String channel, byte[] data) {
+
     }
 
     public void connectNow(ServerInfo target)
@@ -196,12 +199,6 @@ public final class UserConnection implements ProxiedPlayer
         {
             sendMessage( message );
         }
-    }
-
-    @Override
-    public void sendData(String channel, byte[] data)
-    {
-        ch.write( new PacketFAPluginMessage( channel, data ) );
     }
 
     @Override

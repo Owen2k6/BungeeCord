@@ -1,13 +1,14 @@
 package net.md_5.bungee.api.scoreboard;
 
 import com.google.common.base.Preconditions;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class Scoreboard

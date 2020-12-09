@@ -1,11 +1,12 @@
 package net.md_5.bungee.protocol.netty;
 
 import io.netty.buffer.ByteBuf;
+import net.md_5.bungee.protocol.PacketDefinitions;
+import net.md_5.bungee.protocol.PacketDefinitions.OpCode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import net.md_5.bungee.protocol.PacketDefinitions;
-import net.md_5.bungee.protocol.PacketDefinitions.OpCode;
 
 public class PacketReader
 {
@@ -59,24 +60,17 @@ public class PacketReader
         }
     }
 
-    private static void readPacket(int packetId, ByteBuf in, int protocol) throws IOException
+    private static void readPacket(int packetId, ByteBuf in) throws IOException
     {
         Instruction[] packetDef = null;
-        if ( packetId + protocol < instructions.length )
+        if ( packetId < instructions.length )
         {
-            packetDef = instructions[packetId + protocol];
+            packetDef = instructions[packetId];
         }
 
         if ( packetDef == null )
         {
-            if ( protocol == PacketDefinitions.VANILLA_PROTOCOL )
-            {
-                throw new IOException( "Unknown packet id " + packetId );
-            } else
-            {
-                readPacket( packetId, in, PacketDefinitions.VANILLA_PROTOCOL );
-                return;
-            }
+            throw new IOException( "Unknown packet id " + packetId );
         }
 
         for ( Instruction instruction : packetDef )
@@ -85,9 +79,9 @@ public class PacketReader
         }
     }
 
-    public static void readPacket(ByteBuf in, int protocol) throws IOException
+    public static void readPacket(ByteBuf in) throws IOException
     {
         int packetId = in.readUnsignedByte();
-        readPacket( packetId, in, protocol );
+        readPacket( packetId, in );
     }
 }

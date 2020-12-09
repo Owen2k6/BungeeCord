@@ -7,15 +7,15 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.util.AttributeKey;
-import java.util.concurrent.TimeUnit;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.ServerConnector;
 import net.md_5.bungee.UserConnection;
-import net.md_5.bungee.connection.InitialHandler;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.protocol.PacketDefinitions;
+import net.md_5.bungee.connection.InitialHandler;
+
+import java.util.concurrent.TimeUnit;
 
 public class PipelineUtils
 {
@@ -59,7 +59,7 @@ public class PipelineUtils
                 // IP_TOS is not supported (Windows XP / Windows Server 2003)
             }
             ch.pipeline().addLast( "timer", new ReadTimeoutHandler( BungeeCord.getInstance().config.getTimeout(), TimeUnit.MILLISECONDS ) );
-            ch.pipeline().addLast( "decoder", new PacketDecoder( PacketDefinitions.VANILLA_PROTOCOL ) );
+            ch.pipeline().addLast( "decoder", new PacketDecoder() );
             ch.pipeline().addLast( "packet-encoder", packetEncoder );
             ch.pipeline().addLast( "array-encoder", arrayEncoder );
             ch.pipeline().addLast( "handler", new HandlerBoss() );

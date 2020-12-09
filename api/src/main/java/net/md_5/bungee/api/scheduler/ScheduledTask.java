@@ -1,7 +1,8 @@
 package net.md_5.bungee.api.scheduler;
 
-import java.util.concurrent.TimeUnit;
 import net.md_5.bungee.api.plugin.Plugin;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a task scheduled for execution by the {@link TaskScheduler}.

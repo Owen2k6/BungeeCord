@@ -4,12 +4,13 @@ import com.google.common.base.Preconditions;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundMessageHandlerAdapter;
 import io.netty.handler.timeout.ReadTimeoutException;
-import java.io.IOException;
-import java.util.logging.Level;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.connection.CancelSendSignal;
 import net.md_5.bungee.packet.DefinedPacket;
 import net.md_5.bungee.packet.PacketHandler;
+
+import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * This class is a primitive wrapper for {@link PacketHandler} instances tied to

@@ -117,17 +117,15 @@ public class EntityMap
     {
         int packetId = packet[0] & 0xFF;
         if ( packetId == 0x1D )
-        { // bulk entity
-            for ( int pos = 2; pos < packet.length; pos += 4 )
+        { // destroy entity
+            int readId = readInt( packet, 1 );
+
+            if ( readId == oldId )
             {
-                int readId = readInt( packet, pos );
-                if ( readId == oldId )
-                {
-                    setInt( packet, pos, newId );
-                } else if ( readId == newId )
-                {
-                    setInt( packet, pos, oldId );
-                }
+                setInt( packet, 1, newId );
+            } else if ( readId == newId )
+            {
+                setInt( packet, 1, oldId );
             }
         } else
         {

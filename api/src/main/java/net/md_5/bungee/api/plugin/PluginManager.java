@@ -3,6 +3,13 @@ package net.md_5.bungee.api.plugin;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import lombok.RequiredArgsConstructor;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.event.LoginEvent;
+import org.yaml.snakeyaml.Yaml;
+
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -15,12 +22,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
-import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.event.LoginEvent;
-import org.yaml.snakeyaml.Yaml;
 
 /**
  * Class to manage bridging between plugin duties and implementation duties, for

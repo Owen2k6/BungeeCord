@@ -1,6 +1,13 @@
 package net.md_5.bungee;
 
 import com.google.common.base.Preconditions;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.ReconnectHandler;
+import net.md_5.bungee.api.config.ListenerInfo;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.yaml.snakeyaml.Yaml;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -9,12 +16,6 @@ import java.net.InetSocketAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.ReconnectHandler;
-import net.md_5.bungee.api.config.ListenerInfo;
-import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import org.yaml.snakeyaml.Yaml;
 
 public class YamlReconnectHandler implements ReconnectHandler
 {

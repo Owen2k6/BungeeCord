@@ -1,6 +1,5 @@
 package net.md_5.bungee;
 
-import net.md_5.bungee.scheduler.BungeeScheduler;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
@@ -12,24 +11,6 @@ import io.netty.channel.ChannelException;
 import io.netty.channel.MultithreadEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import net.md_5.bungee.config.Configuration;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.net.InetSocketAddress;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Synchronized;
@@ -45,11 +26,38 @@ import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
-import net.md_5.bungee.command.*;
+import net.md_5.bungee.command.CommandAlert;
+import net.md_5.bungee.command.CommandBungee;
+import net.md_5.bungee.command.CommandEnd;
+import net.md_5.bungee.command.CommandIP;
+import net.md_5.bungee.command.CommandList;
+import net.md_5.bungee.command.CommandPerms;
+import net.md_5.bungee.command.CommandReload;
+import net.md_5.bungee.command.CommandSend;
+import net.md_5.bungee.command.CommandServer;
+import net.md_5.bungee.command.ConsoleCommandSender;
+import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.YamlConfig;
 import net.md_5.bungee.netty.PipelineUtils;
 import net.md_5.bungee.packet.DefinedPacket;
-import net.md_5.bungee.packet.PacketFAPluginMessage;
+import net.md_5.bungee.scheduler.BungeeScheduler;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Main BungeeCord proxy class.
@@ -60,11 +68,11 @@ public class BungeeCord extends ProxyServer
     /**
      * Server protocol version.
      */
-    public static final byte PROTOCOL_VERSION = 60;
+    public static final byte PROTOCOL_VERSION = 14;
     /**
      * Server game version.
      */
-    public static final String GAME_VERSION = "1.5";
+    public static final String GAME_VERSION = "Beta 1.7.3";
     /**
      * Current operation state.
      */
@@ -77,7 +85,7 @@ public class BungeeCord extends ProxyServer
      * Thread pools.
      */
     public final ScheduledExecutorService executors = new ScheduledThreadPoolExecutor( 8, new ThreadFactoryBuilder().setNameFormat( "Bungee Pool Thread #%1$d" ).build() );
-    public final MultithreadEventLoopGroup eventLoops = new NioEventLoopGroup( 0, new ThreadFactoryBuilder().setNameFormat( "Netty IO Thread #%1$d" ).build() );
+    public final MultithreadEventLoopGroup eventLoops = new NioEventLoopGroup( Runtime.getRuntime().availableProcessors(), new ThreadFactoryBuilder().setNameFormat( "Netty IO Thread #%1$d" ).build() );
     /**
      * locations.yml save thread.
      */
@@ -146,17 +154,6 @@ public class BungeeCord extends ProxyServer
      */
     public static void main(String[] args) throws Exception
     {
-        Calendar deadline = Calendar.getInstance();
-        deadline.set( 2013, 3, 31 ); // year, month, date
-        if ( Calendar.getInstance().after( deadline ) )
-        {
-            System.err.println( "*** Warning, this build is outdated ***" );
-            System.err.println( "*** Please download a new build from http://ci.md-5.net/job/BungeeCord ***" );
-            System.err.println( "*** You will get NO support regarding this build ***" );
-            System.err.println( "*** Server will start in 15 seconds ***" );
-            Thread.sleep( TimeUnit.SECONDS.toMillis( 15 ) );
-        }
-
         BungeeCord bungee = new BungeeCord();
         ProxyServer.setInstance( bungee );
         bungee.getLogger().info( "Enabled BungeeCord version " + bungee.getVersion() );
@@ -364,7 +361,7 @@ public class BungeeCord extends ProxyServer
         return Collections.unmodifiableCollection( pluginChannels );
     }
 
-    public PacketFAPluginMessage registerChannels()
+    /*public PacketFAPluginMessage registerChannels()
     {
         StringBuilder sb = new StringBuilder();
         for ( String s : getChannels() )
@@ -374,7 +371,7 @@ public class BungeeCord extends ProxyServer
         }
         byte[] payload = sb.substring( 0, sb.length() - 1 ).getBytes();
         return new PacketFAPluginMessage( "REGISTER", payload );
-    }
+    }*/
 
     @Override
     public byte getProtocolVersion()

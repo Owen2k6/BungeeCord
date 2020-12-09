@@ -1,7 +1,8 @@
 package net.md_5.bungee.api.connection;
 
-import java.net.InetSocketAddress;
 import net.md_5.bungee.api.config.ListenerInfo;
+
+import java.net.InetSocketAddress;
 
 /**
  * Represents a user attempting to log into the proxy.

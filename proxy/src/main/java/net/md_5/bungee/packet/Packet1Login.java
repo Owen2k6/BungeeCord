@@ -9,51 +9,30 @@ public class Packet1Login extends DefinedPacket
 {
 
     public int entityId;
-    public String levelType;
-    public byte gameMode;
-    public int dimension;
-    public byte difficulty;
-    public byte unused;
-    public byte maxPlayers;
+    public String username;
+    public long seed;
+    public byte dimension;
 
-    public Packet1Login(int entityId, String levelType, byte gameMode, byte dimension, byte difficulty, byte unused, byte maxPlayers)
+    public Packet1Login(int entityId, String username, long seed, byte dimension)
     {
         super( 0x01 );
         writeInt( entityId );
-        writeUTF( levelType );
-        writeByte( gameMode );
+        writeUTF( username );
+        writeLong( seed );
         writeByte( dimension );
-        writeByte( difficulty );
-        writeByte( unused );
-        writeByte( maxPlayers );
+
         this.entityId = entityId;
-        this.levelType = levelType;
-        this.gameMode = gameMode;
+        this.username = username;
+        this.seed = seed;
         this.dimension = dimension;
-        this.difficulty = difficulty;
-        this.unused = unused;
-        this.maxPlayers = maxPlayers;
     }
 
-    Packet1Login(byte[] buf)
-    {
-        super( 0x01, buf );
+    Packet1Login(byte[] buf) {
+        super(0x01, buf);
         this.entityId = readInt();
-        this.levelType = readUTF();
-        this.gameMode = readByte();
-        if ( available() == 4 )
-        {
-            this.dimension = readByte();
-        } else if ( available() == 7 )
-        {
-            this.dimension = readInt();
-        } else
-        {
-            throw new IllegalStateException();
-        }
-        this.difficulty = readByte();
-        this.unused = readByte();
-        this.maxPlayers = readByte();
+        this.username = readUTF();
+        this.seed = readLong();
+        this.dimension = readByte();
     }
 
     @Override

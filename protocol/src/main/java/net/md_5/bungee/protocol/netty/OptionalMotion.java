@@ -1,6 +1,7 @@
 package net.md_5.bungee.protocol.netty;
 
 import io.netty.buffer.ByteBuf;
+
 import java.io.IOException;
 
 class OptionalMotion extends Instruction

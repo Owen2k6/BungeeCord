@@ -1,12 +1,13 @@
 package net.md_5.bungee.scheduler;
 
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
+
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 @Data
 public class BungeeTask implements ScheduledTask

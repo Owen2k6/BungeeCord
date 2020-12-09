@@ -1,10 +1,11 @@
 package net.md_5.bungee.api.plugin;
 
-import java.io.File;
-import java.io.InputStream;
 import lombok.Getter;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ConfigurationAdapter;
+
+import java.io.File;
+import java.io.InputStream;
 
 /**
  * Represents any Plugin that may be loaded at runtime to enhance existing
