@@ -155,7 +155,7 @@ public class PacketDefinitions
                 INT, SHORT, INT, BYTE, BYTE
         };
         opCodes[0x3C] = new OpCode[]{
-                DOUBLE, DOUBLE, DOUBLE, FLOAT, INT_3, FLOAT, FLOAT, FLOAT
+                DOUBLE, DOUBLE, DOUBLE, FLOAT, INT_3
         };
         opCodes[0x3D] = new OpCode[]{
                 INT, INT, USHORT_BYTE, INT, INT
