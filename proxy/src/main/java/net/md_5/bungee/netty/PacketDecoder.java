@@ -1,8 +1,8 @@
 package net.md_5.bungee.netty;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.MessageBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.MessageList;
 import io.netty.handler.codec.ReplayingDecoder;
 import net.md_5.bungee.protocol.netty.PacketReader;
 
@@ -18,7 +18,7 @@ public class PacketDecoder extends ReplayingDecoder<Void>
 {
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, MessageBuf<Object> out) throws Exception    {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, MessageList<Object> out) throws Exception    {
         int startIndex = in.readerIndex();
         PacketReader.readPacket( in );
         byte[] buf = new byte[ in.readerIndex() - startIndex ];

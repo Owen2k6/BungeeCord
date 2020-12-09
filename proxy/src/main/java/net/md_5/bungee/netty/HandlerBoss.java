@@ -2,7 +2,8 @@ package net.md_5.bungee.netty;
 
 import com.google.common.base.Preconditions;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundMessageHandlerAdapter;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.MessageList;
 import io.netty.handler.timeout.ReadTimeoutException;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.connection.CancelSendSignal;
@@ -17,7 +18,7 @@ import java.util.logging.Level;
  * channels to maintain simple states, and only call the required, adapted
  * methods when the channel is connected.
  */
-public class HandlerBoss extends ChannelInboundMessageHandlerAdapter<byte[]>
+public class HandlerBoss extends ChannelInboundHandlerAdapter
 {
 
     private PacketHandler handler;
@@ -49,25 +50,26 @@ public class HandlerBoss extends ChannelInboundMessageHandlerAdapter<byte[]>
     }
 
     @Override
-    public void messageReceived(ChannelHandlerContext ctx, byte[] msg) throws Exception
-    {
-        if ( handler != null && ctx.channel().isActive() )
+    public void messageReceived(ChannelHandlerContext ctx, MessageList<Object> messageList) throws Exception {
+        for ( Object msg : messageList )
         {
-            DefinedPacket packet = DefinedPacket.packet( msg );
-            boolean sendPacket = true;
-            if ( packet != null )
+            if (handler != null && ctx.channel().isActive())
             {
-                try
+                DefinedPacket packet = DefinedPacket.packet( (byte[]) msg );
+                boolean sendPacket = true;
+                if (packet != null)
                 {
-                    packet.handle( handler );
-                } catch ( CancelSendSignal ex )
-                {
-                    sendPacket = false;
+                    try
+                    {
+                        packet.handle(handler);
+                    } catch ( CancelSendSignal ex ) {
+                        sendPacket = false;
+                    }
                 }
-            }
-            if ( sendPacket )
-            {
-                handler.handle( msg );
+                if ( sendPacket )
+                {
+                    handler.handle((byte[]) msg);
+                }
             }
         }
     }
