@@ -21,8 +21,20 @@ abstract class Instruction
     static final Instruction SHORT_BYTE = new ShortHeader( BYTE );
     static final Instruction SHORT_ITEM = new ShortHeader( ITEM );
     static final Instruction STRING = new ShortHeader( new Jump( 2 ) );
-    static final Instruction USHORT_BYTE = new UnsignedShortByte();
     static final Instruction BLOCK_CHANGE_ARRAY = new BlockChangeArray();
+
+    static final Instruction BYTE_BYTE = new Instruction()
+    {
+        @Override
+        void read(ByteBuf in) throws IOException
+        {
+            int size = in.readByte() & 0xFF;
+            for ( short s = 0; s < size; s++ )
+            {
+                BYTE.read(in);
+            }
+        }
+    };
 
     abstract void read(ByteBuf in) throws IOException;
 }

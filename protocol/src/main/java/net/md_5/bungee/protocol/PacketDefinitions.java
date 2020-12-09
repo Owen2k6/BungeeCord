@@ -15,7 +15,7 @@ import static net.md_5.bungee.protocol.PacketDefinitions.OpCode.SHORT;
 import static net.md_5.bungee.protocol.PacketDefinitions.OpCode.SHORT_BYTE;
 import static net.md_5.bungee.protocol.PacketDefinitions.OpCode.SHORT_ITEM;
 import static net.md_5.bungee.protocol.PacketDefinitions.OpCode.STRING;
-import static net.md_5.bungee.protocol.PacketDefinitions.OpCode.USHORT_BYTE;
+import static net.md_5.bungee.protocol.PacketDefinitions.OpCode.BYTE_BYTE;
 
 public class PacketDefinitions
 {
@@ -24,7 +24,7 @@ public class PacketDefinitions
     public enum OpCode
     {
         BYTE, DOUBLE, FLOAT, INT, INT_3, INT_BYTE, ITEM, LONG, METADATA,
-        OPTIONAL_MOTION, SHORT, SHORT_BYTE, SHORT_ITEM, STRING, USHORT_BYTE, BLOCK_CHANGE_ARRAY
+        OPTIONAL_MOTION, SHORT, SHORT_BYTE, SHORT_ITEM, STRING, BLOCK_CHANGE_ARRAY, BYTE_BYTE
     }
 
     static {
@@ -191,7 +191,7 @@ public class PacketDefinitions
                 INT, SHORT, INT, STRING, STRING, STRING, STRING
         };
         opCodes[0x83] = new OpCode[]{
-                SHORT, SHORT, USHORT_BYTE
+                SHORT, SHORT, BYTE_BYTE
         };
         opCodes[0xC8] = new OpCode[]{
                 INT, BYTE
