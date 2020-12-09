@@ -158,7 +158,7 @@ public class PacketDefinitions
                 DOUBLE, DOUBLE, DOUBLE, FLOAT, INT_3
         };
         opCodes[0x3D] = new OpCode[]{
-                INT, INT, USHORT_BYTE, INT, INT
+                INT, INT, BYTE, INT, INT
         };
         opCodes[0x46] = new OpCode[]{
                 BYTE
@@ -190,7 +190,7 @@ public class PacketDefinitions
         opCodes[0x82] = new OpCode[]{
                 INT, SHORT, INT, STRING, STRING, STRING, STRING
         };
-        opCodes[131] = new OpCode[]{
+        opCodes[0x83] = new OpCode[]{
                 SHORT, SHORT, USHORT_BYTE
         };
         opCodes[0xC8] = new OpCode[]{
