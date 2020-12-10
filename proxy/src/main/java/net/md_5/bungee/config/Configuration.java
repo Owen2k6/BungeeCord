@@ -34,6 +34,7 @@ public class Configuration
      */
     private Map<String, ServerInfo> servers;
     private boolean ipForwarding = true;
+    private String messagingSecret;
     private int playerLimit = -1;
 
     public void load()
@@ -46,6 +47,9 @@ public class Configuration
         playerLimit = adapter.getInt( "player_limit", playerLimit );
 
         ipForwarding = adapter.getBoolean( "ip_forward", true );
+
+        messagingSecret = adapter.getString( "messaging_secret", "change_me" );
+        Preconditions.checkArgument( !messagingSecret.equals("change_me"), "Change 'messaging_secret' to something more unique" );
 
         listeners = adapter.getListeners();
         Preconditions.checkArgument( listeners != null && !listeners.isEmpty(), "No listeners defined." );

@@ -2,6 +2,7 @@ package net.md_5.bungee.connection;
 
 import io.netty.channel.Channel;
 import lombok.RequiredArgsConstructor;
+import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.EntityMap;
 import net.md_5.bungee.ServerConnection;
 import net.md_5.bungee.UserConnection;
@@ -9,8 +10,11 @@ import net.md_5.bungee.Util;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.ServerKickEvent;
+import net.md_5.bungee.messaging.MessageData;
+import net.md_5.bungee.messaging.MessagingHandler;
 import net.md_5.bungee.packet.Packet0KeepAlive;
 import net.md_5.bungee.packet.Packet3Chat;
 import net.md_5.bungee.packet.PacketFFKick;
@@ -72,6 +76,21 @@ public class DownstreamBridge extends PacketHandler
 
         if ( chatEvent.isCancelled() )
         {
+            throw new CancelSendSignal();
+        }
+
+        MessageData data = MessagingHandler.handleServerSpecialMessage( BungeeCord.getInstance().config.getMessagingSecret(), chat.message );
+        if ( data != null )
+        {
+            ProxiedPlayer player = bungee.getPlayer(data.getUsername());
+            if ( player != null )
+            {
+                ServerInfo targetServer = bungee.getServerInfo( data.getTargetServer() );
+                if ( targetServer != null )
+                {
+                    player.connect( targetServer );
+                }
+            }
             throw new CancelSendSignal();
         }
     }
