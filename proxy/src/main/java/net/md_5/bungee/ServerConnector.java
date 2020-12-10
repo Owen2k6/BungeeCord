@@ -71,7 +71,7 @@ public class ServerConnector extends PacketHandler
                 // Once again, first connection
                 user.clientEntityId = login.entityId;
                 user.serverEntityId = login.entityId;
-                // Set tab list size
+
                 Packet1Login modLogin = new Packet1Login(
                         login.entityId,
                         login.username,
@@ -81,11 +81,12 @@ public class ServerConnector extends PacketHandler
                 user.ch.write( modLogin );
             } else
             {
-                user.sendPacket( Packet9Respawn.DIM1_SWITCH );
-                user.sendPacket( Packet9Respawn.DIM2_SWITCH );
+                byte oppositeDimension = (byte) ( login.dimension >= 0 ? -1 : 0 );
 
                 user.serverEntityId = login.entityId;
-                user.ch.write( new Packet9Respawn(login.dimension));
+
+                user.ch.write( new Packet9Respawn( oppositeDimension ) );
+                user.ch.write( new Packet9Respawn( login.dimension) );
 
                 // Remove from old servers
                 user.getServer().setObsolete( true );
