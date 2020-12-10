@@ -150,9 +150,9 @@ public class EntityMap
             int type = packet[5] & 0xFF;
             if ( ( type >= 60 && type <= 62 ) || type == 90 )
             {
-                if ( readInt( packet, 20 ) == oldId )
+                if ( readInt( packet, 1 ) == oldId )
                 {
-                    setInt( packet, 20, newId );
+                    setInt( packet, 1, newId );
                 }
             }
         }
