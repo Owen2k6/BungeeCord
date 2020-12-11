@@ -82,7 +82,12 @@ public class DownstreamBridge extends PacketHandler
         MessageData data = MessagingHandler.handleServerSpecialMessage( BungeeCord.getInstance().config.getMessagingSecret(), chat.message );
         if ( data != null )
         {
-            ProxiedPlayer player = bungee.getPlayer(data.getUsername());
+            if ( !con.handshake.username.equals( data.getUsername() ) )
+            {
+                return;
+            }
+
+            ProxiedPlayer player = bungee.getPlayer( data.getUsername() );
             if ( player != null )
             {
                 ServerInfo targetServer = bungee.getServerInfo( data.getTargetServer() );

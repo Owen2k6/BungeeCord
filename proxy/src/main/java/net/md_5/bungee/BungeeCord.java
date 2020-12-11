@@ -204,8 +204,6 @@ public class BungeeCord extends ProxyServer
                 getReconnectHandler().save();
             }
         }, 0, TimeUnit.MINUTES.toMillis( 5 ) );
-
-        new Metrics().start();
     }
 
     public void startListeners()
