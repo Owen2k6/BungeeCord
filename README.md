@@ -1,6 +1,6 @@
-BungeeCord
+BungeeCord Beta Support
 ==========
-The most reliable Minecraft server portal suite.
+The most reliable Minecraft server portal suite. Now for Beta 1.7.3
 ------------------------------------------------
 BungeeCord is a piece of Java software which allows a user to link multiple Minecraft servers together, allowing players to teleport between them and access advanced features. This makes it perfect for servers looking to expand their player base and spread across multiple gameplay styles.
 
