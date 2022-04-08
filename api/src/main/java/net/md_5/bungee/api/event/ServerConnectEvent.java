@@ -28,7 +28,7 @@ public class ServerConnectEvent extends Event implements Cancellable
      */
     private ServerInfo target;
     
-    public ChatEvent(ProxiedPlayer player, ServerInfo target)
+    public ServerConnectEvent(ProxiedPlayer player, ServerInfo target)
     {
         this.player = player;
         this.target = target;
