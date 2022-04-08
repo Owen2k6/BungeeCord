@@ -19,6 +19,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.netty.HandlerBoss;
 import net.md_5.bungee.netty.PipelineUtils;
 import net.md_5.bungee.packet.DefinedPacket;
@@ -206,7 +207,7 @@ public final class UserConnection implements ProxiedPlayer
     {
         Preconditions.checkState( server != null, "Not connected to server" );
         
-        String message = BungeeCord.getInstance().config.getMessagingSecret() + "#" + String.join("#", data);
+        String message = BungeeCord.getInstance().config.getMessagingSecret() + "#" + String.join( "#", data );
         
         server.getCh().write( new Packet3Chat( message ) );
     }
