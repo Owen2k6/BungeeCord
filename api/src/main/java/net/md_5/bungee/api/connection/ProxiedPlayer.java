@@ -69,4 +69,11 @@ public interface ProxiedPlayer extends Connection, CommandSender
      * @param message the message to say
      */
     public void chat(String message);
+    
+    /**
+     * Send a plugin message to the server for this player. A plugin on the server should handle the data.
+     *
+     * @param data the data to send
+     */
+    public void sendPluginMessage(String[] data);
 }
