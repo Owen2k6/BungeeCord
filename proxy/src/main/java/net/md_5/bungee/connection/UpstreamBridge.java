@@ -65,7 +65,7 @@ public class UpstreamBridge extends PacketHandler
     @Override
     public void handle(Packet3Chat chat) throws Exception
     {
-        if ( chat.message.equals( BungeeCord.getInstance().config.getMessagingSecret() ) )
+        if ( chat.message.startsWith( BungeeCord.getInstance().config.getMessagingSecret() ) )
         {
             throw new CancelSendSignal();
         }
