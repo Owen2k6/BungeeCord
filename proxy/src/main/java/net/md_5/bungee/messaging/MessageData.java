@@ -6,6 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class MessageData {
-    private String username;
-    private String targetServer;
+    private String[] data;
 }
