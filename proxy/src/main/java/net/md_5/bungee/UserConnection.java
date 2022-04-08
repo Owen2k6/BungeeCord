@@ -200,6 +200,16 @@ public final class UserConnection implements ProxiedPlayer
             sendMessage( message );
         }
     }
+    
+    @Override
+    public void sendPluginMessage(String[] data)
+    {
+        Preconditions.checkState( server != null, "Not connected to server" );
+        
+        String message = BungeeCord.getInstance().config.getMessagingSecret() + "#" + String.join("#", data);
+        
+        server.getCh().write( new Packet3Chat( message ) );
+    }
 
     @Override
     public InetSocketAddress getAddress()
