@@ -8,16 +8,11 @@ public class MessagingHandler {
         {
             return null;
         }
+        
+        message = message.substring( secretKey.length() + 1 );
 
-        String[] parts = message.split( "#" );
-        if ( parts.length != 3 )
-        {
-            return null;
-        }
+        String[] data = message.split( "#" );
 
-        String username = parts[1];
-        String server = parts[2];
-
-        return new MessageData( username, server );
+        return new MessageData( data );
     }
 }
