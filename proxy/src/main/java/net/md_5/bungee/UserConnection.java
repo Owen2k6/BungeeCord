@@ -121,6 +121,12 @@ public final class UserConnection implements ProxiedPlayer
     {
         ServerConnectEvent event = new ServerConnectEvent( this, info );
         ProxyServer.getInstance().getPluginManager().callEvent( event );
+        if ( event.isCancelled() ) {
+            if ( server == null ) {
+                disconnect( "You cannot connect to this server" );
+            }
+            return;
+        }
         final ServerInfo target = event.getTarget(); // Update in case the event changed target
         new Bootstrap()
                 .channel( NioSocketChannel.class )
