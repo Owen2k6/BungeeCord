@@ -13,6 +13,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.ServerKickEvent;
+import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.messaging.MessageData;
 import net.md_5.bungee.messaging.MessagingHandler;
 import net.md_5.bungee.packet.Packet0KeepAlive;
