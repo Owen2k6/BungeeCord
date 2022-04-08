@@ -12,26 +12,16 @@ import net.md_5.bungee.api.plugin.Cancellable;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class PluginMessageEvent extends TargetedEvent implements Cancellable
+public class PluginMessageEvent extends TargetedEvent
 {
-
-    /**
-     * Cancelled state.
-     */
-    private boolean cancelled;
-    /**
-     * Tag specified for this plugin message.
-     */
-    private final String tag;
     /**
      * Data contained in this plugin message.
      */
-    private final byte[] data;
+    private final String data;
 
-    public PluginMessageEvent(Connection sender, Connection receiver, String tag, byte[] data)
+    public PluginMessageEvent(Connection sender, Connection receiver, String data)
     {
         super( sender, receiver );
-        this.tag = tag;
         this.data = data;
     }
 }
