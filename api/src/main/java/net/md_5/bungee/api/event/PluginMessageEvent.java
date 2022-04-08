@@ -17,9 +17,9 @@ public class PluginMessageEvent extends TargetedEvent
     /**
      * Data contained in this plugin message.
      */
-    private final String data;
+    private final String[] data;
 
-    public PluginMessageEvent(Connection sender, Connection receiver, String data)
+    public PluginMessageEvent(Connection sender, Connection receiver, String[] data)
     {
         super( sender, receiver );
         this.data = data;
