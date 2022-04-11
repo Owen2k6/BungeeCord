@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
+import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.connection.CancelSendSignal;
 import net.md_5.bungee.connection.DownstreamBridge;
 import net.md_5.bungee.netty.HandlerBoss;
@@ -62,6 +63,8 @@ public class ServerConnector extends PacketHandler
         {
             ch.write( packetQueue.poll() );
         }
+        
+        ServerInfo from = ( user.getServer() == null ) ? null : user.getServer().getInfo();
 
         synchronized ( user.getSwitchMutex() )
         {
@@ -107,6 +110,8 @@ public class ServerConnector extends PacketHandler
             user.setServer( server );
             ch.pipeline().get( HandlerBoss.class ).setHandler( new DownstreamBridge( bungee, user, server ) );
         }
+        
+        bungee.getPluginManager().callEvent( new ServerSwitchEvent( user, from ) );
 
         thisState = State.FINISHED;
 
