@@ -70,10 +70,15 @@ public class UpstreamBridge extends PacketHandler
             throw new CancelSendSignal();
         }
         ChatEvent chatEvent = new ChatEvent( con, con.getServer(), chat.message );
-        if ( bungee.getPluginManager().callEvent( chatEvent ).isCancelled() )
+        bungee.getPluginManager().callEvent( chatEvent );
+        
+        if ( chatEvent.isCancelled() )
         {
             throw new CancelSendSignal();
         }
+        
+        chat.message = chatEvent.getMessage();
+        
         if ( chatEvent.isCommand() )
         {
             if ( bungee.getPluginManager().dispatchCommand( con, chat.message.substring( 1 ) ) )
