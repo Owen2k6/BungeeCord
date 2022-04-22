@@ -35,7 +35,7 @@ public class Configuration
     private Map<String, ServerInfo> servers;
     private boolean ipForwarding = true;
     private String messagingSecret;
-    private boolean onlineMode = true;
+    private boolean onlineMode = false;
     private int playerLimit = -1;
 
     public void load()
