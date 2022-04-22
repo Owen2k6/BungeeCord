@@ -69,8 +69,7 @@ public class UpstreamBridge extends PacketHandler
         {
             throw new CancelSendSignal();
         }
-        ChatEvent chatEvent = new ChatEvent( con, con.getServer(), chat.message );
-        bungee.getPluginManager().callEvent( chatEvent );
+        ChatEvent chatEvent = bungee.getPluginManager().callEvent( new ChatEvent( con, con.getServer(), chat.message ) );
         
         if ( chatEvent.isCancelled() )
         {
