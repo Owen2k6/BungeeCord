@@ -33,7 +33,7 @@ public class UpstreamBridge extends PacketHandler
         PlayerDisconnectEvent event = new PlayerDisconnectEvent( con );
         bungee.getPluginManager().callEvent( event );
         bungee.getTabListHandler().onDisconnect( con );
-        bungee.connections.remove( con.getName() );
+        BungeeCord.getInstance().connections.remove( con.getName() );
 
         if ( con.getServer() != null )
         {
