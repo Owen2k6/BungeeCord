@@ -16,6 +16,7 @@ import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.netty.HandlerBoss;
+import net.md_5.bungee.packet.Packet1Login;
 import net.md_5.bungee.packet.Packet2Handshake;
 import net.md_5.bungee.packet.PacketFEPing;
 import net.md_5.bungee.packet.PacketFFKick;
@@ -33,10 +34,12 @@ public class InitialHandler extends PacketHandler implements PendingConnection
     private final ListenerInfo listener;
     private Packet2Handshake handshake;
     private State thisState = State.HANDSHAKE;
+    private UserConnection tempUser;
+    private String serverId;
 
     private enum State
     {
-        HANDSHAKE, FINISHED;
+        HANDSHAKE, LOGIN, FINISHED;
     }
 
     @Override
@@ -77,18 +80,82 @@ public class InitialHandler extends PacketHandler implements PendingConnection
         int limit = BungeeCord.getInstance().config.getPlayerLimit();
         Preconditions.checkState( limit <= 0 || bungee.getPlayers().size() < limit, "Server is full!" );
 
+        // If offline mode and they are already on, don't allow connect
+        if ( !BungeeCord.getInstance().config.isOnlineMode() && bungee.getPlayer( handshake.username ) != null )
+        {
+            disconnect( "Already connected" );
+            return;
+        }
+
         this.handshake = handshake;
 
-        UserConnection userCon = new UserConnection( (BungeeCord) bungee, ch, this, handshake );
-        bungee.getPluginManager().callEvent( new PostLoginEvent( userCon ) );
+        if ( !BungeeCord.getInstance().config.isOnlineMode() )
+        {
+            bungee.getPluginManager().callEvent( new PostLoginEvent( userCon ) );
 
-        ch.pipeline().get( HandlerBoss.class ).setHandler( new UpstreamBridge( bungee, userCon ) );
+            ch.pipeline().get( HandlerBoss.class ).setHandler( new UpstreamBridge( bungee, userCon ) );
+        
+            ServerInfo server = bungee.getReconnectHandler().getServer( userCon );
+            userCon.connect( server, true );
 
-        ServerInfo server = bungee.getReconnectHandler().getServer( userCon );
-        userCon.connect( server, true );
-
-        thisState = State.FINISHED;
+            thisState = State.FINISHED;
+        }
+        else
+        {
+            Random rand = new Random();
+            this.serverId = Long.toHexString( rand.nextLong() );
+            this.tempUser = userCon;
+            thisState = State.AUTH;
+            
+            if ( ch.isActive() )
+            {
+                ch.write( new Packet2Handshake( serverId ) );
+            }
+        }
         throw new CancelSendSignal();
+    }
+    
+    @Override
+    public void handle(Packet1Login login) throws Exception
+    {
+        Preconditions.checkState( thisState == State.LOGIN, "Not expecting LOGIN" );
+        Preconditions.checkState( tempUser != null, "User is null" );
+        UserConnection userCon = tempUser;
+        if ( !BungeeCord.getInstance().config.isOnlineMode() ) {
+            bungee.getPluginManager().callEvent( new PostLoginEvent( userCon ) );
+
+            ch.pipeline().get( HandlerBoss.class ).setHandler( new UpstreamBridge( bungee, userCon ) );
+        
+            ServerInfo server = bungee.getReconnectHandler().getServer( userCon );
+            userCon.connect( server, true );
+
+            thisState = State.FINISHED;
+            throw new CancelSendSignal();
+        } else {
+            // TODO possibly make this on a seperate thread
+            if ( BungeeCord.getInstance().config.isOnlineMode() )
+            {
+                URL url = new URL( "http://session.minecraft.net/game/checkserver.jsp?user=" + URLEncoder.encode( handshake.username, "UTF-8" ) + "&serverId=" + URLEncoder.encode( serverId, "UTF-8" ) );
+                BufferedReader bufferedreader = new BufferedReader( new InputStreamReader( url.openStream() ) );
+                String s1 = bufferedreader.readLine();
+
+                bufferedreader.close();
+                if ( !s1.equals( "YES" ) ) {
+                    disconnect( "Failed to verify username!" );
+                    return;
+                }
+            }
+            // we're real!
+            bungee.getPluginManager().callEvent( new PostLoginEvent( userCon ) );
+
+            ch.pipeline().get( HandlerBoss.class ).setHandler( new UpstreamBridge( bungee, userCon ) );
+        
+            ServerInfo server = bungee.getReconnectHandler().getServer( userCon );
+            userCon.connect( server, true );
+
+            thisState = State.FINISHED;
+            throw new CancelSendSignal();
+        }
     }
 
     @Override
