@@ -78,14 +78,17 @@ public class DownstreamBridge extends PacketHandler
         {
             throw new CancelSendSignal();
         }
-        
-        chat.message = chatEvent.getMessage();
 
-        MessageData data = MessagingHandler.handleServerSpecialMessage( BungeeCord.getInstance().config.getMessagingSecret(), chat.message );
+        MessageData data = MessagingHandler.handleServerSpecialMessage( BungeeCord.getInstance().config.getMessagingSecret(), event.getMessage() );
         if ( data != null )
         {
             PluginMessageEvent pluginMessageEvent = new PluginMessageEvent( con.getServer(), con, data.getData() );
             bungee.getPluginManager().callEvent( pluginMessageEvent );
+            throw new CancelSendSignal();
+        }
+        
+        if ( !chatEvent.getMessage().equals(chat.message) ) {
+            con.getServer().getCh().write( new Packet3Chat( event.getMessage() ) );
             throw new CancelSendSignal();
         }
     }
