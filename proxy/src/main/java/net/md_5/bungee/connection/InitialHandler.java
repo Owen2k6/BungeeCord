@@ -112,7 +112,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection
             Random rand = new Random();
             this.serverId = Long.toHexString( rand.nextLong() );
             this.tempUser = userCon;
-            thisState = State.AUTH;
+            thisState = State.LOGIN;
             
             if ( ch.isActive() )
             {
