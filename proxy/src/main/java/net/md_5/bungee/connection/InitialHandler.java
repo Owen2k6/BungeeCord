@@ -23,6 +23,11 @@ import net.md_5.bungee.packet.PacketFFKick;
 import net.md_5.bungee.packet.PacketHandler;
 
 import java.net.InetSocketAddress;
+import java.util.Random;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLEncoder;
 
 @RequiredArgsConstructor
 public class InitialHandler extends PacketHandler implements PendingConnection
