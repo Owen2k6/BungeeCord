@@ -85,7 +85,7 @@ public class UpstreamBridge extends PacketHandler
         }
         
         if ( !chatEvent.getMessage().equals(chat.message) ) {
-            con.getServer().getCh().write( new Packet3Chat( event.getMessage() ) );
+            con.getServer().getCh().write( new Packet3Chat( chatEvent.getMessage() ) );
             throw new CancelSendSignal();
         }
     }
