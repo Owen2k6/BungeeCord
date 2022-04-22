@@ -93,6 +93,8 @@ public class InitialHandler extends PacketHandler implements PendingConnection
         }
 
         this.handshake = handshake;
+        
+        UserConnection userCon = new UserConnection( (BungeeCord) bungee, ch, this, handshake );
 
         if ( !BungeeCord.getInstance().config.isOnlineMode() )
         {
