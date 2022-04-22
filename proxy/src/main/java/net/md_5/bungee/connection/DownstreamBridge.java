@@ -88,7 +88,7 @@ public class DownstreamBridge extends PacketHandler
         }
         
         if ( !chatEvent.getMessage().equals(chat.message) ) {
-            con.getCh().write( new Packet3Chat( event.getMessage() ) );
+            con.ch.write( new Packet3Chat( event.getMessage() ) );
             throw new CancelSendSignal();
         }
     }
