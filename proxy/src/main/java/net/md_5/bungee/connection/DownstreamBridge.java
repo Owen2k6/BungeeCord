@@ -79,6 +79,8 @@ public class DownstreamBridge extends PacketHandler
         {
             throw new CancelSendSignal();
         }
+        
+        chat.message = chatEvent.getMessage();
 
         MessageData data = MessagingHandler.handleServerSpecialMessage( BungeeCord.getInstance().config.getMessagingSecret(), chat.message );
         if ( data != null )
