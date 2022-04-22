@@ -76,7 +76,7 @@ public class UpstreamBridge extends PacketHandler
             throw new CancelSendSignal();
         }
         
-        chat.message = chatEvent.getMessage();
+        chat = new Packet3Chat( chatEvent.getMessage() );
         
         if ( chatEvent.isCommand() )
         {
