@@ -31,11 +31,11 @@ public class CommandList extends Command
             Collection<ProxiedPlayer> serverPlayers = server.getPlayers();
 
             StringBuilder message = new StringBuilder();
-            message.append( "[" );
+            message.append( ChatColor.GREEN ).append( "[" );
             message.append( server.getName() );
-            message.append( "] (" );
+            message.append( "] " ).append( ChatColor.YELLOW ).append( "(" );
             message.append( serverPlayers.size() );
-            message.append( "): " );
+            message.append( "): " ).append( ChatColor.RESET );
 
             List<String> players = new ArrayList<>();
             for ( ProxiedPlayer player : serverPlayers )
