@@ -35,7 +35,7 @@ public class CommandList extends Command
             message.append( server.getName() );
             message.append( "] " ).append( ChatColor.YELLOW ).append( "(" );
             message.append( serverPlayers.size() );
-            message.append( "): " ).append( ChatColor.RESET );
+            message.append( "): " ).append( ChatColor.WHITE );
 
             List<String> players = new ArrayList<>();
             for ( ProxiedPlayer player : serverPlayers )
@@ -48,7 +48,7 @@ public class CommandList extends Command
             {
                 for ( String player : players )
                 {
-                    message.append( player ).append( ChatColor.RESET ).append( ", " );
+                    message.append( player ).append( ChatColor.WHITE ).append( ", " );
                 }
             }
 
