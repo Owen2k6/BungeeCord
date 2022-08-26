@@ -253,7 +253,7 @@ public class BungeeCord extends ProxyServer
         getLogger().info( "Disconnecting " + connections.size() + " connections" );
         for ( UserConnection user : connections.values() )
         {
-            user.disconnect( "Proxy restarting, brb." );
+            user.disconnect( "Server restarting." );
         }
 
         getLogger().info( "Closing IO threads" );
