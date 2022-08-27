@@ -454,7 +454,7 @@ public class BungeeCord extends ProxyServer
         connectionLock.writeLock().lock();
         try
         {
-            getLogger().severe(connections.remove( con.getName() ).toString());
+            connections.remove( con.getName() );
         } finally
         {
             connectionLock.writeLock().unlock();
