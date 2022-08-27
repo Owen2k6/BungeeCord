@@ -124,12 +124,12 @@ public class BungeeCord extends ProxyServer
     private final File pluginsFolder = new File( "plugins" );
     @Getter
     private final BungeeScheduler scheduler = new BungeeScheduler();
-    @Getter
+    /*@Getter
     private final AsyncHttpClient httpClient = new AsyncHttpClient(
             new NettyAsyncHttpProvider(
             new AsyncHttpClientConfig.Builder().setAsyncHttpClientProviderConfig(
             new NettyAsyncHttpProviderConfig().addProperty( NettyAsyncHttpProviderConfig.BOSS_EXECUTOR_SERVICE, executors ) ).setExecutorService( executors ).build() ) );
-
+*/
     
     {
         getPluginManager().registerCommand( new CommandReload() );
@@ -251,7 +251,7 @@ public class BungeeCord extends ProxyServer
             public void run() {
                 BungeeCord.this.isRunning = false;
 
-                httpClient.close();
+                //httpClient.close();
                 executors.shutdown();
 
                 stopListeners();
