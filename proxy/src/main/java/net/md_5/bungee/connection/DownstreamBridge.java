@@ -66,7 +66,7 @@ public class DownstreamBridge extends PacketHandler
     @Override
     public void handle(Packet0KeepAlive alive) throws Exception
     {
-        con.trackingPingId = alive.id;
+        //con.trackingPingId = alive.id;
     }
 
     @Override
