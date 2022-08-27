@@ -40,7 +40,7 @@ public class UpstreamBridge extends PacketHandler
         // We lost connection to the client
         PlayerDisconnectEvent event = new PlayerDisconnectEvent( con );
         bungee.getPluginManager().callEvent( event );
-        bungee.getTabListHandler().onDisconnect( con );
+        //bungee.getTabListHandler().onDisconnect( con );
         BungeeCord.getInstance().removeConnection( con );
 
         if ( con.getServer() != null )
