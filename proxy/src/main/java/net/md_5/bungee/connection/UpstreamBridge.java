@@ -13,7 +13,6 @@ import net.md_5.bungee.packet.Packet3Chat;
 import net.md_5.bungee.packet.PacketHandler;
 import net.md_5.bungee.BungeeCord;
 
-@RequiredArgsConstructor
 public class UpstreamBridge extends PacketHandler
 {
 
