@@ -70,7 +70,6 @@ public class ServerConnector extends PacketHandler
         {
             if ( user.getServer() == null )
             {
-                BungeeCord.getInstance().connections.put( user.getName(), user );
                 // Once again, first connection
                 user.clientEntityId = login.entityId;
                 user.serverEntityId = login.entityId;
@@ -97,11 +96,13 @@ public class ServerConnector extends PacketHandler
             }
 
             // TODO: Fix this?
-            /*if ( !user.ch.isActive() )
+            if ( !user.ch.isActive() )
             {
                 server.disconnect( "Quitting" );
-                throw new IllegalStateException( "No client connected for pending server!" );
-            }*/
+                // Silly server admins see stack trace and die
+                bungee.getLogger().warning( "No client connected for pending server!" );
+                return;
+            }
 
             // Add to new server
             // TODO: Move this to the connected() method of DownstreamBridge
