@@ -46,7 +46,7 @@ public interface ProxiedPlayer extends Connection, CommandSender
      *
      * @return the current ping time
      */
-    public int getPing();
+    //public int getPing();
 
     /**
      * Send a plugin message to this player.
