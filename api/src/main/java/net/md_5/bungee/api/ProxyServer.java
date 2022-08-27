@@ -119,7 +119,7 @@ public abstract class ProxyServer
      *
      * @return the tab list handler
      */
-    public abstract TabListHandler getTabListHandler();
+    //public abstract TabListHandler getTabListHandler();
 
     /**
      * Set the used tab list handler, should not be changed once players have
@@ -127,7 +127,7 @@ public abstract class ProxyServer
      *
      * @param handler the tab list handler to set
      */
-    public abstract void setTabListHandler(TabListHandler handler);
+    //public abstract void setTabListHandler(TabListHandler handler);
 
     /**
      * Get the currently in use reconnect handler.
