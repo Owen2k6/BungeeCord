@@ -48,14 +48,14 @@ public final class UserConnection implements ProxiedPlayer
     public int serverEntityId;
     // ping stuff
     //public int trackingPingId;
-    public long pingTime;
+    //public long pingTime;
     @Getter
     private String name;
     @Getter
     private String displayName;
-    @Getter
-    @Setter
-    private int ping = 1000;
+    //@Getter
+    //@Setter
+    //private int ping = 1000;
     // Permissions
     private final Collection<String> playerGroups = new THashSet<>();
     private final Collection<String> permissions = new THashSet<>();
