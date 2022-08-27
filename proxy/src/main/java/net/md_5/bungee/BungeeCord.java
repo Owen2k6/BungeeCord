@@ -281,7 +281,6 @@ public class BungeeCord extends ProxyServer
                 {
                     getLogger().info( "Saving reconnect locations" );
                     reconnectHandler.save();
-                    reconnectHandler.close();
                 }
                 //getLogger().info( "Saving reconnect locations" );
                 //reconnectHandler.save();
