@@ -269,10 +269,22 @@ public class BungeeCord extends ProxyServer
                 }
 
                 getLogger().info( "Closing IO threads" );
-                eventLoops.shutdown();
+                eventLoops.shutdownGracefully();
+                try
+                {
+                    eventLoops.awaitTermination( Long.MAX_VALUE, TimeUnit.NANOSECONDS );
+                } catch ( InterruptedException ex )
+                {
+                }
 
-                getLogger().info( "Saving reconnect locations" );
-                reconnectHandler.save();
+                if ( reconnectHandler != null )
+                {
+                    getLogger().info( "Saving reconnect locations" );
+                    reconnectHandler.save();
+                    reconnectHandler.close();
+                }
+                //getLogger().info( "Saving reconnect locations" );
+                //reconnectHandler.save();
                 saveThread.cancel();
 
                 // TODO: Fix this shit
