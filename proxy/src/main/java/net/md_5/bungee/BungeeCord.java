@@ -105,9 +105,9 @@ public class BungeeCord extends ProxyServer
     /**
      * Tab list handler
      */
-    @Getter
+    /*@Getter
     @Setter
-    public TabListHandler tabListHandler;
+    public TabListHandler tabListHandler;*/
     /**
      * Plugin manager.
      */
