@@ -233,5 +233,5 @@ public abstract class ProxyServer
      *
      * @return the server's {@link AsyncHttpClient} instance
      */
-    public abstract AsyncHttpClient getHttpClient();
+    //public abstract AsyncHttpClient getHttpClient();
 }
