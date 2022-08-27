@@ -47,7 +47,7 @@ public final class UserConnection implements ProxiedPlayer
     public int clientEntityId;
     public int serverEntityId;
     // ping stuff
-    public int trackingPingId;
+    //public int trackingPingId;
     public long pingTime;
     @Getter
     private String name;
