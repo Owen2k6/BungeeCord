@@ -1,5 +1,6 @@
 package net.md_5.bungee;
 
+import com.google.common.base.Preconditions;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -34,13 +35,19 @@ public class BungeeServerInfo extends ServerInfo
     @Override
     public void sendData(String channel, byte[] data)
     {
-        Server server = ProxyServer.getInstance().getServer( getName() );
-        if ( server != null )
+        Preconditions.checkNotNull( channel, "channel" );
+        Preconditions.checkNotNull( data, "data" );
+
+        synchronized ( packetQueue )
         {
-            server.sendData( channel, data );
-        } else
-        {
-            //packetQueue.add( new PacketFAPluginMessage( channel, data ) );
+            Server server = ( ProxyServer.getInstance().getPlayers().isEmpty() ) ? null : ProxyServer.getInstance().getPlayers().iterator().next().getServer();
+            if ( server != null )
+            {
+                server.sendData( channel, data );
+            } else
+            {
+                //packetQueue.add( new PacketFAPluginMessage( channel, data ) );
+            }
         }
     }
 
