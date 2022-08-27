@@ -8,12 +8,12 @@ import lombok.ToString;
 public class Packet0KeepAlive extends DefinedPacket
 {
 
-    public int id;
+    //public int id;
 
     Packet0KeepAlive(byte[] buf)
     {
         super( 0x00, buf );
-        id = readInt();
+        //id = readInt();
     }
 
     @Override
