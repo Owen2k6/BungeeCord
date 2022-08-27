@@ -62,12 +62,12 @@ public class UpstreamBridge extends PacketHandler
     @Override
     public void handle(Packet0KeepAlive alive) throws Exception
     {
-        if ( alive.id == con.trackingPingId )
+        /*if ( alive.id == con.trackingPingId )
         {
             int newPing = (int) ( System.currentTimeMillis() - con.pingTime );
             bungee.getTabListHandler().onPingChange( con, newPing );
             con.setPing( newPing );
-        }
+        }*/
     }
 
     @Override
