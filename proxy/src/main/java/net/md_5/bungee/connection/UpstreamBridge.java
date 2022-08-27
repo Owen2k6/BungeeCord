@@ -19,6 +19,15 @@ public class UpstreamBridge extends PacketHandler
 
     private final ProxyServer bungee;
     private final UserConnection con;
+    
+    public UpstreamBridge(ProxyServer bungee, UserConnection con)
+    {
+        this.bungee = bungee;
+        this.con = con;
+
+        BungeeCord.getInstance().addConnection( con );
+        // con.unsafe().sendPacket( BungeeCord.getInstance().registerChannels() );
+    }
 
     @Override
     public void exception(Throwable t) throws Exception
