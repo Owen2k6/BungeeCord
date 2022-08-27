@@ -123,7 +123,7 @@ public class BungeeCord extends ProxyServer
     @Getter
     private final File pluginsFolder = new File( "plugins" );
     @Getter
-    private final TaskScheduler scheduler = new BungeeScheduler();
+    private final BungeeScheduler scheduler = new BungeeScheduler();
     @Getter
     private final AsyncHttpClient httpClient = new AsyncHttpClient(
             new NettyAsyncHttpProvider(
