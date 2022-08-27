@@ -32,11 +32,7 @@ public interface ScheduledTask
     Runnable getTask();
 
     /**
-     * Get the delay in the specified unit before this task will next be
-     * executed.
-     *
-     * @param unit the unit to get the delay in
-     * @return the time before the next execution of this task
+     * Cancel this task to suppress subsequent executions.
      */
-    long getDelay(TimeUnit unit);
+    void cancel();
 }
