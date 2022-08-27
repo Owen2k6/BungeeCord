@@ -290,7 +290,6 @@ public class BungeeCord extends ProxyServer
                     getScheduler().cancel( plugin );
                 }
 
-                scheduler.shutdown();
                 getLogger().info( "Thank you and goodbye" );
                 System.exit( 0 );
             }
