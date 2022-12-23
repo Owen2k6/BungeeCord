@@ -1,3 +1,5 @@
+#### This fork is designed in mind of OldSchoolMinecraft and GoplexMinecraft. Some features might be limited elsewhere.
+
 BungeeCord Beta Support
 ==========
 The most reliable Minecraft server portal suite. Now for Beta 1.7.3
