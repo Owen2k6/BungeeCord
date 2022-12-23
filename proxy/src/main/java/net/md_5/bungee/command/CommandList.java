@@ -19,7 +19,7 @@ import java.util.List;
 public class CommandList extends Command {
 
     public CommandList() {
-        super("glist", "bungeecord.command.list");
+        super("list", "bungeecord.command.list");
     }
 
     @Override
