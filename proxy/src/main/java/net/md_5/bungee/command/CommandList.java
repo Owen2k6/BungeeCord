@@ -1,5 +1,6 @@
 package net.md_5.bungee.command;
 
+import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -15,46 +16,39 @@ import java.util.List;
 /**
  * Command to list all players connected to the proxy.
  */
-public class CommandList extends Command
-{
+public class CommandList extends Command {
 
-    public CommandList()
-    {
-        super( "glist", "bungeecord.command.list" );
+    public CommandList() {
+        super("glist", "bungeecord.command.list");
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args)
-    {
-        for ( ServerInfo server : ProxyServer.getInstance().getServers().values() )
-        {
+    public void execute(CommandSender sender, String[] args) {
+        sender.sendMessage("\2477There are currently \2478" + ProxyServer.getInstance().getPlayers().size() + "\2477 out of \2478200\2477 currently online,");
+        for (ServerInfo server : ProxyServer.getInstance().getServers().values()) {
             Collection<ProxiedPlayer> serverPlayers = server.getPlayers();
 
             StringBuilder message = new StringBuilder();
-            message.append( ChatColor.GREEN ).append( "[" );
-            message.append( server.getName() );
-            message.append( "] " ).append( ChatColor.YELLOW ).append( "(" );
-            message.append( serverPlayers.size() );
-            message.append( "): " ).append( ChatColor.WHITE );
+            message.append(ChatColor.GRAY).append("[");
+            message.append(ChatColor.DARK_GRAY).append(server.getName());
+            message.append(ChatColor.GRAY).append("] ").append("(");
+            message.append(ChatColor.DARK_GRAY).append(serverPlayers.size());
+            message.append(ChatColor.GRAY).append("): ").append(ChatColor.DARK_GRAY);
 
             List<String> players = new ArrayList<>();
-            for ( ProxiedPlayer player : serverPlayers )
-            {
-                players.add( player.getDisplayName() );
+            for (ProxiedPlayer player : serverPlayers) {
+                players.add(player.getDisplayName());
             }
-            Collections.sort( players, String.CASE_INSENSITIVE_ORDER );
+            Collections.sort(players, String.CASE_INSENSITIVE_ORDER);
 
-            if ( !players.isEmpty() )
-            {
-                for ( String player : players )
-                {
-                    message.append( player ).append( ChatColor.WHITE ).append( ", " );
+            if (!players.isEmpty()) {
+                for (String player : players) {
+                    message.append(player).append(ChatColor.GRAY).append(", ").append(ChatColor.DARK_GRAY);
                 }
             }
 
-            sender.sendMessage( message.substring( 0, message.length() - 2 ) );
+            sender.sendMessage(message.substring(0, message.length() - 2));
         }
 
-        sender.sendMessage( "Total players online: " + ProxyServer.getInstance().getPlayers().size() );
     }
 }
