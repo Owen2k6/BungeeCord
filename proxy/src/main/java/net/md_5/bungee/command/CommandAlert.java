@@ -14,28 +14,33 @@ public class CommandAlert extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "You must supply a message.");
-        } else {
-            StringBuilder builder = new StringBuilder();
-            if (args[0].startsWith("&h")) {
-                // Remove &h
-                args[0] = args[0].substring(2, args[0].length());
+        try {
+            if (args.length == 0) {
+                sender.sendMessage(ChatColor.RED + "You must supply a message.");
             } else {
-                builder.append(ChatColor.RED);
-                builder.append("[").append(ChatColor.WHITE).append("Global").append(ChatColor.RED).append("]").append(ChatColor.LIGHT_PURPLE);
-            }
+                StringBuilder builder = new StringBuilder();
+                if (args[0].startsWith("&h")) {
+                    // Remove &h
+                    args[0] = args[0].substring(2, args[0].length());
+                } else {
+                    builder.append(ChatColor.RED);
+                    builder.append("[").append(ChatColor.WHITE).append("Global").append(ChatColor.RED).append("]").append(ChatColor.LIGHT_PURPLE);
+                }
 
-            for (String s : args) {
-                builder.append(ChatColor.translateAlternateColorCodes('&', s));
-                builder.append(" ");
-            }
+                for (String s : args) {
+                    builder.append(ChatColor.translateAlternateColorCodes('&', s));
+                    builder.append(" ");
+                }
 
-            String message = builder.substring(0, builder.length() - 1);
-            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-                player.sendMessage(message);
+                String message = builder.substring(0, builder.length() - 1);
+                for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+                    player.sendMessage(message);
+                }
+                ProxyServer.getInstance().getConsole().sendMessage(message);
             }
-            ProxyServer.getInstance().getConsole().sendMessage(message);
+        } catch (Exception e) {
+            sender.sendMessage("Sorry, an error occurred performing this command.");
+            e.printStackTrace();
         }
     }
 }

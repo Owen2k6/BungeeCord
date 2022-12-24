@@ -98,7 +98,7 @@ public final class UserConnection implements ProxiedPlayer
     {
         if ( getServer() == null || getServer().getInfo() == target )
         {
-            sendMessage( ChatColor.RED + "Cannot connect to server you are already on!" );
+            sendMessage( ChatColor.AQUA + "You're already here!" );
         } else
         {
             connect( target, false );
@@ -153,16 +153,16 @@ public final class UserConnection implements ProxiedPlayer
                     ServerInfo def = ProxyServer.getInstance().getServers().get( getPendingConnection().getListener().getDefaultServer() );
                     if ( retry && !target.equals( def ) )
                     {
-                        sendMessage( ChatColor.RED + "Could not connect to target server, you have been moved to the default server" );
+                        sendMessage( ChatColor.RED + "Could not connect to target server." );
                         connect( def, false );
                     } else
                     {
                         if ( server == null )
                         {
-                            disconnect( "Could not connect to default server, please try again later: " + future.cause().getClass().getName() );
+                            disconnect( "Could not connect: " + future.cause().getClass().getName() );
                         } else
                         {
-                            sendMessage( ChatColor.RED + "Could not connect to selected server, please try again later: " + future.cause().getClass().getName() );
+                            sendMessage( ChatColor.RED + "Failed to connect to target, " + future.cause().getClass().getName() );
                         }
                     }
                 }

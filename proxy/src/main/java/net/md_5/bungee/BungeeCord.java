@@ -59,13 +59,13 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import net.md_5.bungee.util.CaseInsensitiveMap;
 
 /**
  * Main BungeeCord proxy class.
  */
-public class BungeeCord extends ProxyServer
-{
+public class BungeeCord extends ProxyServer {
 
     /**
      * Server protocol version.
@@ -87,11 +87,11 @@ public class BungeeCord extends ProxyServer
      * Thread pools.
      */
     //public final ScheduledExecutorService executors = new ScheduledThreadPoolExecutor( 8, new ThreadFactoryBuilder().setNameFormat( "Bungee Pool Thread #%1$d" ).build() );
-    public final MultithreadEventLoopGroup eventLoops = new NioEventLoopGroup( Runtime.getRuntime().availableProcessors(), new ThreadFactoryBuilder().setNameFormat( "Netty IO Thread #%1$d" ).build() );
+    public final MultithreadEventLoopGroup eventLoops = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors(), new ThreadFactoryBuilder().setNameFormat("Netty IO Thread #%1$d").build());
     /**
      * locations.yml save thread.
      */
-    private final Timer saveThread = new Timer( "Reconnect Saver" );
+    private final Timer saveThread = new Timer("Reconnect Saver");
     /**
      * Server socket listener.
      */
@@ -111,7 +111,7 @@ public class BungeeCord extends ProxyServer
      * Plugin manager.
      */
     @Getter
-    public final PluginManager pluginManager = new PluginManager( this );
+    public final PluginManager pluginManager = new PluginManager(this);
     @Getter
     @Setter
     private ReconnectHandler reconnectHandler;
@@ -120,7 +120,7 @@ public class BungeeCord extends ProxyServer
     private ConfigurationAdapter configurationAdapter = new YamlConfig();
     private final Collection<String> pluginChannels = new HashSet<>();
     @Getter
-    private final File pluginsFolder = new File( "plugins" );
+    private final File pluginsFolder = new File("plugins");
     @Getter
     private final BungeeScheduler scheduler = new BungeeScheduler();
     /*@Getter
@@ -129,23 +129,22 @@ public class BungeeCord extends ProxyServer
             new AsyncHttpClientConfig.Builder().setAsyncHttpClientProviderConfig(
             new NettyAsyncHttpProviderConfig().addProperty( NettyAsyncHttpProviderConfig.BOSS_EXECUTOR_SERVICE, executors ) ).setExecutorService( executors ).build() ) );
 */
-    
-    {
-        getPluginManager().registerCommand( new CommandReload() );
-        getPluginManager().registerCommand( new CommandEnd() );
-        getPluginManager().registerCommand( new CommandList() );
-        getPluginManager().registerCommand( new CommandServer() );
-        getPluginManager().registerCommand( new CommandIP() );
-        getPluginManager().registerCommand( new CommandAlert() );
-        getPluginManager().registerCommand( new CommandBungee() );
-        getPluginManager().registerCommand( new CommandPerms() );
-        getPluginManager().registerCommand( new CommandSend() );
 
-        registerChannel( "BungeeCord" );
+    {
+        getPluginManager().registerCommand(new CommandReload());
+        getPluginManager().registerCommand(new CommandEnd());
+        getPluginManager().registerCommand(new CommandList());
+        getPluginManager().registerCommand(new CommandServer());
+        getPluginManager().registerCommand(new CommandIP());
+        getPluginManager().registerCommand(new CommandAlert());
+        getPluginManager().registerCommand(new CommandBungee());
+        getPluginManager().registerCommand(new CommandPerms());
+        getPluginManager().registerCommand(new CommandSend());
+
+        registerChannel("BungeeCord");
     }
 
-    public static BungeeCord getInstance()
-    {
+    public static BungeeCord getInstance() {
         return (BungeeCord) ProxyServer.getInstance();
     }
 
@@ -155,23 +154,19 @@ public class BungeeCord extends ProxyServer
      * @param args command line arguments, currently none are used
      * @throws Exception when the server cannot be started
      */
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         BungeeCord bungee = new BungeeCord();
-        ProxyServer.setInstance( bungee );
-        bungee.getLogger().info( "Enabled BungeeCord version " + bungee.getVersion() );
+        ProxyServer.setInstance(bungee);
+        bungee.getLogger().info("Enabled BungeeCord version " + bungee.getVersion());
         bungee.start();
 
-        BufferedReader br = new BufferedReader( new InputStreamReader( System.in ) );
-        while ( bungee.isRunning )
-        {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        while (bungee.isRunning) {
             String line = br.readLine();
-            if ( line != null )
-            {
-                boolean handled = getInstance().getPluginManager().dispatchCommand( ConsoleCommandSender.getInstance(), line );
-                if ( !handled )
-                {
-                    System.err.println( "Command not found" );
+            if (line != null) {
+                boolean handled = getInstance().getPluginManager().dispatchCommand(ConsoleCommandSender.getInstance(), line);
+                if (!handled) {
+                    System.err.println("Command not found");
                 }
             }
         }
@@ -184,13 +179,11 @@ public class BungeeCord extends ProxyServer
      * @throws Exception
      */
     @Override
-    public void start() throws Exception
-    {
+    public void start() throws Exception {
         pluginsFolder.mkdir();
-        pluginManager.loadPlugins( pluginsFolder );
+        pluginManager.loadPlugins(pluginsFolder);
         config.load();
-        if ( reconnectHandler == null )
-        {
+        if (reconnectHandler == null) {
             reconnectHandler = new YamlReconnectHandler();
         }
         isRunning = true;
@@ -199,53 +192,44 @@ public class BungeeCord extends ProxyServer
 
         startListeners();
 
-        saveThread.scheduleAtFixedRate( new TimerTask()
-        {
+        saveThread.scheduleAtFixedRate(new TimerTask() {
             @Override
-            public void run()
-            {
+            public void run() {
                 getReconnectHandler().save();
             }
-        }, 0, TimeUnit.MINUTES.toMillis( 5 ) );
+        }, 0, TimeUnit.MINUTES.toMillis(5));
     }
 
-    public void startListeners()
-    {
-        for ( ListenerInfo info : config.getListeners() )
-        {
+    public void startListeners() {
+        for (ListenerInfo info : config.getListeners()) {
             Channel server = new ServerBootstrap()
-                    .channel( NioServerSocketChannel.class )
-                    .childAttr( PipelineUtils.LISTENER, info )
-                    .childHandler( PipelineUtils.SERVER_CHILD )
-                    .group( eventLoops )
-                    .localAddress( info.getHost() )
+                    .channel(NioServerSocketChannel.class)
+                    .childAttr(PipelineUtils.LISTENER, info)
+                    .childHandler(PipelineUtils.SERVER_CHILD)
+                    .group(eventLoops)
+                    .localAddress(info.getHost())
                     .bind().channel();
-            listeners.add( server );
+            listeners.add(server);
 
-            getLogger().info( "Listening on " + info.getHost() );
+            getLogger().info("Listening on " + info.getHost());
         }
     }
 
-    public void stopListeners()
-    {
-        for ( Channel listener : listeners )
-        {
-            getLogger().log( Level.INFO, "Closing listener {0}", listener );
-            try
-            {
+    public void stopListeners() {
+        for (Channel listener : listeners) {
+            getLogger().log(Level.INFO, "Closing listener {0}", listener);
+            try {
                 listener.close().syncUninterruptibly();
-            } catch ( ChannelException ex )
-            {
-                getLogger().severe( "Could not close listen thread" );
+            } catch (ChannelException ex) {
+                getLogger().severe("Could not close listen thread");
             }
         }
         listeners.clear();
     }
 
     @Override
-    public void stop()
-    {
-        new Thread( "Shutdown Thread" ) {
+    public void stop() {
+        new Thread("Shutdown Thread") {
             @Override
             public void run() {
                 BungeeCord.this.isRunning = false;
@@ -254,31 +238,27 @@ public class BungeeCord extends ProxyServer
                 //executors.shutdown();
 
                 stopListeners();
-                getLogger().info( "Closing pending connections" );
+                getLogger().info("Closing pending connections");
 
                 connectionLock.readLock().lock();
                 try {
-                    getLogger().info( "Disconnecting " + connections.size() + " connections" );
-                    for ( UserConnection user : connections.values() )
-                    {
-                        user.disconnect( "Server restarting." );
+                    getLogger().info("Disconnecting " + connections.size() + " connections");
+                    for (UserConnection user : connections.values()) {
+                        user.disconnect("Server restarting.");
                     }
                 } finally {
                     connectionLock.readLock().unlock();
                 }
 
-                getLogger().info( "Closing IO threads" );
+                getLogger().info("Closing IO threads");
                 eventLoops.shutdownGracefully();
-                try
-                {
-                    eventLoops.awaitTermination( Long.MAX_VALUE, TimeUnit.NANOSECONDS );
-                } catch ( InterruptedException ex )
-                {
+                try {
+                    eventLoops.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+                } catch (InterruptedException ex) {
                 }
 
-                if ( reconnectHandler != null )
-                {
-                    getLogger().info( "Saving reconnect locations" );
+                if (reconnectHandler != null) {
+                    getLogger().info("Saving reconnect locations");
                     reconnectHandler.save();
                 }
                 //getLogger().info( "Saving reconnect locations" );
@@ -286,23 +266,20 @@ public class BungeeCord extends ProxyServer
                 saveThread.cancel();
 
                 // TODO: Fix this shit
-                getLogger().info( "Disabling plugins" );
-                for ( Plugin plugin : pluginManager.getPlugins() )
-                {
-                    try
-                    {
+                getLogger().info("Disabling plugins");
+                for (Plugin plugin : pluginManager.getPlugins()) {
+                    try {
                         plugin.onDisable();
-                    } catch ( Throwable t )
-                    {
-                        getLogger().severe( "Exception disabling plugin " + plugin.getDescription().getName() );
+                    } catch (Throwable t) {
+                        getLogger().severe("Exception disabling plugin " + plugin.getDescription().getName());
                         t.printStackTrace();
                     }
-                    getScheduler().cancel( plugin );
+                    getScheduler().cancel(plugin);
                 }
 
                 scheduler.shutdown();
-                getLogger().info( "Thank you and goodbye" );
-                System.exit( 0 );
+                getLogger().info("Thank you and goodbye");
+                System.exit(0);
             }
         }.start();
     }
@@ -312,13 +289,11 @@ public class BungeeCord extends ProxyServer
      *
      * @param packet the packet to send
      */
-    public void broadcast(DefinedPacket packet)
-    {
+    public void broadcast(DefinedPacket packet) {
         connectionLock.readLock().lock();
         try {
-            for ( UserConnection con : connections.values() )
-            {
-                con.sendPacket( packet );
+            for (UserConnection con : connections.values()) {
+                con.sendPacket(packet);
             }
         } finally {
             connectionLock.readLock().unlock();
@@ -326,27 +301,23 @@ public class BungeeCord extends ProxyServer
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BungeeCord";
     }
 
     @Override
-    public String getVersion()
-    {
-        return ( BungeeCord.class.getPackage().getImplementationVersion() == null ) ? "unknown" : BungeeCord.class.getPackage().getImplementationVersion();
+    public String getVersion() {
+        return (BungeeCord.class.getPackage().getImplementationVersion() == null) ? "unknown" : BungeeCord.class.getPackage().getImplementationVersion();
     }
 
     @Override
-    public Logger getLogger()
-    {
+    public Logger getLogger() {
         return BungeeLogger.instance;
     }
 
     @Override
     @SuppressWarnings("unchecked") // TODO: Abstract more
-    public Collection<ProxiedPlayer> getPlayers()
-    {
+    public Collection<ProxiedPlayer> getPlayers() {
         connectionLock.readLock().lock();
         try {
             return (Collection) connections.values();
@@ -356,49 +327,41 @@ public class BungeeCord extends ProxyServer
     }
 
     @Override
-    public ProxiedPlayer getPlayer(String name)
-    {
+    public ProxiedPlayer getPlayer(String name) {
         connectionLock.readLock().lock();
-        try
-        {
-            return connections.get( name );
-        } finally
-        {
+        try {
+            return connections.get(name);
+        } finally {
             connectionLock.readLock().unlock();
         }
     }
 
     @Override
-    public Map<String, ServerInfo> getServers()
-    {
+    public Map<String, ServerInfo> getServers() {
         return config.getServers();
     }
 
     @Override
-    public ServerInfo getServerInfo(String name)
-    {
-        return getServers().get( name );
+    public ServerInfo getServerInfo(String name) {
+        return getServers().get(name);
     }
 
     @Override
     @Synchronized("pluginChannels")
-    public void registerChannel(String channel)
-    {
-        pluginChannels.add( channel );
+    public void registerChannel(String channel) {
+        pluginChannels.add(channel);
     }
 
     @Override
     @Synchronized("pluginChannels")
-    public void unregisterChannel(String channel)
-    {
-        pluginChannels.remove( channel );
+    public void unregisterChannel(String channel) {
+        pluginChannels.remove(channel);
     }
 
     @Override
     @Synchronized("pluginChannels")
-    public Collection<String> getChannels()
-    {
-        return Collections.unmodifiableCollection( pluginChannels );
+    public Collection<String> getChannels() {
+        return Collections.unmodifiableCollection(pluginChannels);
     }
 
     /*public PacketFAPluginMessage registerChannels()
@@ -414,49 +377,39 @@ public class BungeeCord extends ProxyServer
     }*/
 
     @Override
-    public byte getProtocolVersion()
-    {
+    public byte getProtocolVersion() {
         return PROTOCOL_VERSION;
     }
 
     @Override
-    public String getGameVersion()
-    {
+    public String getGameVersion() {
         return GAME_VERSION;
     }
 
     @Override
-    public ServerInfo constructServerInfo(String name, InetSocketAddress address, boolean restricted)
-    {
-        return new BungeeServerInfo( name, address, restricted );
+    public ServerInfo constructServerInfo(String name, InetSocketAddress address, boolean restricted) {
+        return new BungeeServerInfo(name, address, restricted);
     }
 
     @Override
-    public CommandSender getConsole()
-    {
+    public CommandSender getConsole() {
         return ConsoleCommandSender.getInstance();
     }
-    
-    public void addConnection(UserConnection con)
-    {
+
+    public void addConnection(UserConnection con) {
         connectionLock.writeLock().lock();
-        try
-        {
-            connections.put( con.getName(), con );
-        } finally
-        {
+        try {
+            connections.put(con.getName(), con);
+        } finally {
             connectionLock.writeLock().unlock();
         }
     }
 
-    public void removeConnection(UserConnection con)
-    {
+    public void removeConnection(UserConnection con) {
         connectionLock.writeLock().lock();
-        try
-        {
-            connections.remove( con.getName() );
-        } finally
-        {
+        try {
+            connections.remove(con.getName());
+        } finally {
             connectionLock.writeLock().unlock();
         }
     }

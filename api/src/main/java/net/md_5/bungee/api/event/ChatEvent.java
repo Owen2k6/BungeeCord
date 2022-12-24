@@ -13,8 +13,7 @@ import net.md_5.bungee.api.plugin.Cancellable;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class ChatEvent extends TargetedEvent implements Cancellable
-{
+public class ChatEvent extends TargetedEvent implements Cancellable {
 
     /**
      * Cancelled state.
@@ -25,9 +24,8 @@ public class ChatEvent extends TargetedEvent implements Cancellable
      */
     private String message;
 
-    public ChatEvent(Connection sender, Connection receiver, String message)
-    {
-        super( sender, receiver );
+    public ChatEvent(Connection sender, Connection receiver, String message) {
+        super(sender, receiver);
         this.message = message;
     }
 
@@ -36,8 +34,7 @@ public class ChatEvent extends TargetedEvent implements Cancellable
      *
      * @return if this message is a command
      */
-    public boolean isCommand()
-    {
-        return message.charAt( 0 ) == '/';
+    public boolean isCommand() {
+        return message.charAt(0) == '/';
     }
 }
