@@ -51,7 +51,7 @@ public class CommandList extends Command {
                 sender.sendMessage(message.substring(0, message.length() - 2));
             }
         } catch (Exception e) {
-            sender.sendMessage("/list failed to be parsed by bungee. Parsing command to the target server.");
+            sender.sendMessage("How.");
             e.printStackTrace();
         }
 
