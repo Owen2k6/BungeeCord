@@ -25,6 +25,7 @@ public class CommandList extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) {
         try {
+            int i = 0;
             sender.sendMessage("\2477There are currently \2478" + ProxyServer.getInstance().getPlayers().size() + "\2477 out of \2478200\2477 currently online,");
             for (ServerInfo server : ProxyServer.getInstance().getServers().values()) {
                 Collection<ProxiedPlayer> serverPlayers = server.getPlayers();
@@ -44,11 +45,14 @@ public class CommandList extends Command {
 
                 if (!players.isEmpty()) {
                     for (String player : players) {
+                        i++;
                         message.append(ChatColor.DARK_GRAY).append(player).append(ChatColor.GRAY).append(", ").append(ChatColor.DARK_GRAY);
+                        if (i==3){
+                            message.append("\n");
+                            i=0;
+                        }
                     }
-                    if (message.toString().length() >= 90){
-                        message.append("\n");
-                    }
+
                 }
 
                 sender.sendMessage(message.substring(0, message.length() - 2));
