@@ -48,14 +48,15 @@ public class CommandList extends Command {
                         i++;
                         message.append(ChatColor.DARK_GRAY).append(player).append(ChatColor.GRAY).append(", ").append(ChatColor.DARK_GRAY);
                         if (i==3){
-                            message.append("\n");
+                            sender.sendMessage(message.toString());
+                            message = new StringBuilder();
                             i=0;
                         }
                     }
 
                 }
 
-                sender.sendMessage(message.substring(0, message.length() - 2));
+                sender.sendMessage(message.toString());
             }
         } catch (Exception e) {
             sender.sendMessage("Sorry, an error occurred performing this command.");
