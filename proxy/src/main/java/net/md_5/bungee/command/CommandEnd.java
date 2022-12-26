@@ -19,6 +19,8 @@ public class CommandEnd extends Command {
             BungeeCord.getInstance().stop();
         } catch (Exception e) {
             sender.sendMessage("Sorry, an error occurred performing this command.");
+            sender.sendMessage("Im not sure how this failed. but its probs your fault.");
+            sender.sendMessage("Works fine on my pc ;-;");
             e.printStackTrace();
         }
     }

@@ -36,7 +36,7 @@ public class DownstreamBridge extends PacketHandler
         if ( server.getInfo() != def )
         {
             con.connectNow( def );
-            con.sendMessage( ChatColor.RED + "The server you were previously on went down, you have been connected to the lobby" );
+            con.sendMessage( ChatColor.RED + "You have been moved to the main priority server." );
         } else
         {
             con.disconnect( Util.exception( t ) );

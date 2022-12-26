@@ -17,15 +17,14 @@ public class CommandAlert extends Command {
         try {
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.RED + "You must supply a message.");
-            } else {
+            } else if (args.length > 109)
+            {
+                sender.sendMessage(ChatColor.RED + "Message must be below 109 chars.");
+            }
+            else {
                 StringBuilder builder = new StringBuilder();
-                if (args[0].startsWith("&h")) {
-                    // Remove &h
-                    args[0] = args[0].substring(2, args[0].length());
-                } else {
-                    builder.append(ChatColor.RED);
-                    builder.append("[").append(ChatColor.WHITE).append("Global").append(ChatColor.RED).append("]").append(ChatColor.LIGHT_PURPLE);
-                }
+                builder.append(ChatColor.RED);
+                builder.append("[").append(ChatColor.WHITE).append("Global").append(ChatColor.RED).append("] ").append(ChatColor.LIGHT_PURPLE);
 
                 for (String s : args) {
                     builder.append(ChatColor.translateAlternateColorCodes('&', s));
