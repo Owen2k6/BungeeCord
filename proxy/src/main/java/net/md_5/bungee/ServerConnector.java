@@ -122,7 +122,7 @@ public class ServerConnector extends PacketHandler
     @Override
     public void handle(PacketFFKick kick) throws Exception
     {
-        String message = ChatColor.RED + target.getName() + ": " + kick.message;
+        String message = ChatColor.RED + kick.message;
         if ( user.getServer() == null )
         {
             user.disconnect( message );

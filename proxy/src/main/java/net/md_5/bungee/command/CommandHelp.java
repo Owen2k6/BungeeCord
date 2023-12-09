@@ -7,7 +7,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class CommandHelp extends Command {
 
     public CommandHelp() {
-        super("bhelp", "bungeecord.command.help");
+        super("plbhelp", "bungeecord.command.help");
     }
 
     @Override

@@ -8,7 +8,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class CommandReload extends Command {
 
     public CommandReload() {
-        super("greload", "bungeecord.command.reload");
+        super("plgreload", "bungeecord.command.reload");
     }
 
     @Override

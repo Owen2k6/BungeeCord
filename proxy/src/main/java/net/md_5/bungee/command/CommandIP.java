@@ -9,7 +9,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class CommandIP extends Command {
 
     public CommandIP() {
-        super("ip", "bungeecord.command.ip");
+        super("plip", "bungeecord.command.ip");
     }
 
     @Override

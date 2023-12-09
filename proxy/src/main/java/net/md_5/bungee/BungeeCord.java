@@ -57,6 +57,8 @@ import net.md_5.bungee.util.CaseInsensitiveMap;
  * Main BungeeCord proxy class.
  */
 public class BungeeCord extends ProxyServer {
+    public static String nodename = "Spain";
+    public static String nodemnt = "MrDumbrava";
 
     /**
      * Server protocol version.
@@ -132,6 +134,7 @@ public class BungeeCord extends ProxyServer {
         getPluginManager().registerCommand(new CommandBungee());
         getPluginManager().registerCommand(new CommandPerms());
         getPluginManager().registerCommand(new CommandSend());
+        getPluginManager().registerCommand(new CommandNode());
 
         registerChannel("BungeeCord");
     }
@@ -236,7 +239,7 @@ public class BungeeCord extends ProxyServer {
                 try {
                     getLogger().info("Disconnecting " + connections.size() + " connections");
                     for (UserConnection user : connections.values()) {
-                        user.disconnect("Server restarting.");
+                        user.disconnect("Node Restarting... Connect later or to main service.");
                     }
                 } finally {
                     connectionLock.readLock().unlock();

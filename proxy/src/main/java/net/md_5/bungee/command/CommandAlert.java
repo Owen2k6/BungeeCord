@@ -9,7 +9,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class CommandAlert extends Command {
 
     public CommandAlert() {
-        super("alert", "bungeecord.command.alert");
+        super("plalert", "bungeecord.command.alert");
     }
 
     @Override

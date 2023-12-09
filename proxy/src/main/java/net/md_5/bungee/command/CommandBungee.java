@@ -8,7 +8,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class CommandBungee extends Command {
 
     public CommandBungee() {
-        super("bungee");
+        super("plbungee");
     }
 
     @Override

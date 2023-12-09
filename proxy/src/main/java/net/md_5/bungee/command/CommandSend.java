@@ -10,7 +10,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class CommandSend extends Command {
 
     public CommandSend() {
-        super("send", "bungeecord.command.send");
+        super("plsend", "bungeecord.command.send");
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.Set;
 public class CommandPerms extends Command {
 
     public CommandPerms() {
-        super("perms");
+        super("plperms");
     }
 
     @Override
