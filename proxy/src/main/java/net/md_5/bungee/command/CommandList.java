@@ -35,19 +35,26 @@ public class CommandList extends Command {
                 message.append(ChatColor.DARK_GRAY).append(server.getName());
                 message.append(ChatColor.GRAY).append("] ").append("(");
                 message.append(ChatColor.DARK_GRAY).append(serverPlayers.size());
-                message.append(ChatColor.GRAY).append("): ").append(ChatColor.DARK_GRAY);
+                message.append(ChatColor.GRAY).append(") ").append(ChatColor.DARK_GRAY);
+                message.append(ChatColor.WHITE).append("===============").append(ChatColor.DARK_GRAY);
+                sender.sendMessage(message.toString());
+                message = new StringBuilder();
 
                 List<String> players = new ArrayList<>();
                 for (ProxiedPlayer player : serverPlayers) {
                     players.add(player.getDisplayName());
                 }
-                Collections.sort(players, String.CASE_INSENSITIVE_ORDER);
+                players.sort(String.CASE_INSENSITIVE_ORDER);
 
                 if (!players.isEmpty()) {
                     for (String player : players) {
                         i++;
-                        message.append(ChatColor.DARK_GRAY).append(player).append(ChatColor.GRAY).append(", ").append(ChatColor.DARK_GRAY);
-                        if (i==3){
+                        if(i == (long) players.size()){
+                            message.append(ChatColor.DARK_GRAY).append(player).append(ChatColor.GRAY);
+                        } else{
+                            message.append(ChatColor.DARK_GRAY).append(player).append(ChatColor.GRAY).append(", ").append(ChatColor.DARK_GRAY);
+                        }
+                        if (i==4){
                             sender.sendMessage(message.toString());
                             message = new StringBuilder();
                             i=0;

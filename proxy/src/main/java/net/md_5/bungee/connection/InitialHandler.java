@@ -80,7 +80,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection
     public void handle(Packet2Handshake handshake) throws Exception
     {
         Preconditions.checkState( thisState == State.HANDSHAKE, "Not expecting HANDSHAKE" );
-        Preconditions.checkArgument( handshake.username.length() <= 16, "Cannot have username longer than 16 characters" );
+        Preconditions.checkArgument( handshake.username.length() <= 16, "Can't have username longer than 16 chars" );
 
         int limit = BungeeCord.getInstance().config.getPlayerLimit();
         Preconditions.checkState( limit <= 0 || bungee.getPlayers().size() < limit, "Server is full!" );
@@ -88,7 +88,7 @@ public class InitialHandler extends PacketHandler implements PendingConnection
         // If offline mode and they are already on, don't allow connect
         if ( !BungeeCord.getInstance().config.isOnlineMode() && bungee.getPlayer( handshake.username ) != null )
         {
-            disconnect( "Already connected" );
+            disconnect( "You're already online!" );
             return;
         }
 
