@@ -8,10 +8,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Command to list all players connected to the proxy.
@@ -29,6 +26,10 @@ public class CommandList extends Command {
             sender.sendMessage("\2477There are currently \2478" + ProxyServer.getInstance().getPlayers().size() + "\2477 out of \2478200\2477 currently online,");
             for (ServerInfo server : ProxyServer.getInstance().getServers().values()) {
                 Collection<ProxiedPlayer> serverPlayers = server.getPlayers();
+
+                if(Objects.equals(server.getName(), "HA")){
+                    continue;
+                }
 
                 StringBuilder message = new StringBuilder();
                 message.append(ChatColor.GRAY).append("[");
