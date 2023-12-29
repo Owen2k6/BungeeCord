@@ -197,8 +197,8 @@ public class YamlConfig implements ConfigurationAdapter
     @SuppressWarnings("unchecked")
     public Collection<String> getGroups(String player)
     {
-        Collection<String> groups = get( "groups." + player, null );
-        Collection<String> ret = ( groups == null ) ? new HashSet<String>() : new HashSet<>( groups );
+        //Collection<String> groups = get( "groups." + player, null );
+        Collection<String> ret = new HashSet<String>();
         ret.add( "default" );
         return ret;
     }

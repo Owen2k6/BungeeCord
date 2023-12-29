@@ -27,7 +27,7 @@ public class CommandList extends Command {
             for (ServerInfo server : ProxyServer.getInstance().getServers().values()) {
                 Collection<ProxiedPlayer> serverPlayers = server.getPlayers();
 
-                if(Objects.equals(server.getName(), "HA")){
+                if(Objects.equals(server.getName(), "HA") || Objects.equals(server.getName(), "TS")){
                     continue;
                 }
 

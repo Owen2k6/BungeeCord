@@ -18,6 +18,14 @@ public class CommandServer extends Command {
         super("server", "bungeecord.command.server");
     }
 
+    private ServerInfo findServer(String name)
+    {
+        Map<String, ServerInfo> servers = ProxyServer.getInstance().getServers();
+        for (ServerInfo server : servers.values())
+            if (server.getName().equalsIgnoreCase(name)) return server;
+        return null;
+    }
+
     @Override
     public void execute(CommandSender sender, String[] args) {
         try {
@@ -37,13 +45,13 @@ public class CommandServer extends Command {
                 if (serverList.length() != 0) {
                     serverList.setLength(serverList.length() - 2);
                 }
-                player.sendMessage(ChatColor.GOLD + "You may connect to the following servers at this time: " + serverList.toString());
+                player.sendMessage(ChatColor.GOLD + "Available Servers: " +ChatColor.GREEN+ serverList.toString());
             } else {
-                ServerInfo server = servers.get(args[0]);
+                ServerInfo server = findServer(args[0]);
                 if (server == null) {
-                    player.sendMessage(ChatColor.RED + "The specified server does not exist");
+                    player.sendMessage(ChatColor.RED + "Unknown Server! Run /server for a list of available servers.");
                 } else if (!server.canAccess(player)) {
-                    player.sendMessage(ChatColor.RED + "You don't have permission to access this server");
+                    player.sendMessage(ChatColor.RED + "You aren't allowed to join this server!");
                 } else {
                     player.connect(server);
                 }

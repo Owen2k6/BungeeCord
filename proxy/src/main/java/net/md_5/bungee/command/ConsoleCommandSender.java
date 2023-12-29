@@ -50,13 +50,15 @@ public class ConsoleCommandSender implements CommandSender
     @Override
     public void addGroups(String... groups)
     {
-        throw new UnsupportedOperationException( "Console may not have groups" );
+        //throw new UnsupportedOperationException( "Console may not have groups" );
+        System.out.println("Console may not have groups");
     }
 
     @Override
     public void removeGroups(String... groups)
     {
-        throw new UnsupportedOperationException( "Console may not have groups" );
+        //throw new UnsupportedOperationException( "Console may not have groups" );
+        System.out.println("Console may not have groups");
     }
 
     @Override
@@ -68,6 +70,7 @@ public class ConsoleCommandSender implements CommandSender
     @Override
     public void setPermission(String permission, boolean value)
     {
-        throw new UnsupportedOperationException( "Console has all permissions" );
+        //throw new UnsupportedOperationException( "Console has all permissions" );
+        System.out.println("Console has all permissions");
     }
 }
