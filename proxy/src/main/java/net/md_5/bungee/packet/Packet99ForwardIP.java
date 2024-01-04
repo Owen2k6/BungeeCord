@@ -11,14 +11,14 @@ public class Packet99ForwardIP extends DefinedPacket
 
     public Packet99ForwardIP(String forwardedIP)
     {
-        super( 0x03 );
+        super( 0x99 );
         writeUTF( forwardedIP );
         this.forwardedIP = forwardedIP;
     }
 
     Packet99ForwardIP(byte[] buf)
     {
-        super( 0x03, buf );
+        super( 0x99, buf );
         this.forwardedIP = readUTF();
     }
 
