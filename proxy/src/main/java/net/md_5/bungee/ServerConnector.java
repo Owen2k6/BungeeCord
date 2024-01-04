@@ -11,11 +11,7 @@ import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.connection.CancelSendSignal;
 import net.md_5.bungee.connection.DownstreamBridge;
 import net.md_5.bungee.netty.HandlerBoss;
-import net.md_5.bungee.packet.DefinedPacket;
-import net.md_5.bungee.packet.Packet1Login;
-import net.md_5.bungee.packet.Packet9Respawn;
-import net.md_5.bungee.packet.PacketFFKick;
-import net.md_5.bungee.packet.PacketHandler;
+import net.md_5.bungee.packet.*;
 
 import java.util.Queue;
 
@@ -29,6 +25,7 @@ public class ServerConnector extends PacketHandler
     private final ServerInfo target;
     private State thisState = State.LOGIN;
     private final static int MAGIC_HEADER = 2;
+    private String userIP = null;
 
     private enum State
     {
@@ -42,10 +39,17 @@ public class ServerConnector extends PacketHandler
         channel.write( user.handshake );
         // IP Forwarding
         boolean flag = BungeeCord.getInstance().config.isIpForwarding();
-        long address = flag ? Util.serializeAddress(user.getAddress().getAddress().getHostAddress()) : 0;
+        long address = flag ? Util.serializeAddress((userIP == null) ? user.getAddress().getAddress().getHostAddress() : userIP) : 0;
         byte header = (byte) (flag ? MAGIC_HEADER : 0);
         // end
         channel.write(new Packet1Login(BungeeCord.PROTOCOL_VERSION,  user.handshake.username, address, header));
+    }
+
+    @Override
+    public void handle(Packet99ForwardIP packet) throws Exception
+    {
+        userIP = packet.forwardedIP;
+        System.out.println("User IP was successfully forwarded: " + userIP);
     }
 
     @Override
