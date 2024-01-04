@@ -52,7 +52,7 @@ public class DownstreamBridge extends PacketHandler
 
         if ( !server.isObsolete() )
         {
-            con.disconnect( "The proxy service is unavailable at this time!" );
+            con.disconnect( "Something went wrong, Please try again!" );
         }
     }
 
