@@ -11,11 +11,7 @@ import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.connection.CancelSendSignal;
 import net.md_5.bungee.connection.DownstreamBridge;
 import net.md_5.bungee.netty.HandlerBoss;
-import net.md_5.bungee.packet.DefinedPacket;
-import net.md_5.bungee.packet.Packet1Login;
-import net.md_5.bungee.packet.Packet9Respawn;
-import net.md_5.bungee.packet.PacketFFKick;
-import net.md_5.bungee.packet.PacketHandler;
+import net.md_5.bungee.packet.*;
 
 import java.util.Queue;
 
@@ -29,6 +25,7 @@ public class ServerConnector extends PacketHandler
     private final ServerInfo target;
     private State thisState = State.LOGIN;
     private final static int MAGIC_HEADER = 2;
+    private String userIP; // PLP
 
     private enum State
     {
@@ -38,6 +35,12 @@ public class ServerConnector extends PacketHandler
     @Override
     public void connected(Channel channel) throws Exception
     {
+        // PLP -> Bungee IP forward
+        userIP = user.getIP();
+
+        channel.write(new Packet99ForwardIP(userIP));
+
+
         this.ch = channel;
         channel.write( user.handshake );
         // IP Forwarding
@@ -51,7 +54,7 @@ public class ServerConnector extends PacketHandler
     @Override
     public void handle(Packet1Login login) throws Exception
     {
-        Preconditions.checkState( thisState == State.LOGIN, "Not exepcting LOGIN" );
+        Preconditions.checkState( thisState == State.LOGIN, "Not expecting LOGIN" );
 
         ServerConnection server = new ServerConnection( ch, target, login );
         ServerConnectedEvent event = new ServerConnectedEvent( user, server );

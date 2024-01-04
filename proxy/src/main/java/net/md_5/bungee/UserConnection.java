@@ -211,6 +211,16 @@ public final class UserConnection implements ProxiedPlayer {
         return Collections.unmodifiableCollection(playerGroups);
     }
 
+    /**
+     * Retrieve the proxy user's IP address
+     * @return String
+     * @author moderator_man
+     */
+    public String getIP()
+    {
+        return ((InetSocketAddress)ch.remoteAddress()).getAddress().getHostAddress();
+    }
+
     @Override
     @Synchronized("permMutex")
     public void addGroups(String... groups) {

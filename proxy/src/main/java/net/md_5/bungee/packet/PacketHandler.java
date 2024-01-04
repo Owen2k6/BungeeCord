@@ -51,4 +51,6 @@ public abstract class PacketHandler
     public void handle(PacketFFKick kick) throws Exception
     {
     }
+
+    public void handle(Packet99ForwardIP packet) throws Exception {}
 }
